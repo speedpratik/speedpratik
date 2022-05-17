@@ -1,0 +1,20 @@
+#navbar {
+    display: flex;
+    background-color: var(--main-dark);
+    flex-direction: row;
+    align-items: center;
+    padding: 0 3vw;
+    justify-content: space-between;
+}
+
+#navbar ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+#navbar ul * { font-family: 'Jost', sans-serif; }
+
+#navbar img {
+    width: 20%;
+}
