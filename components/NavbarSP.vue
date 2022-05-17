@@ -4,7 +4,11 @@
       <li><img src="icon.svg"></li>
     </ul>
 
-    <ul>
+    <ul class="userContent">
+      <li>
+        <span>IwenLeGoat</span>
+        <img src="basicAvatar.svg" alt="Avatar">
+      </li>
       <li><button>Connexion</button></li>
     </ul>
   </section>
