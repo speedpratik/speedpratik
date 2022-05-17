@@ -6,14 +6,14 @@ Represents the main topic of SpeedPratik being the exam subjects it focuses on.
 
 ### Subject Structure
 
-| Field      | Type   | Description                                                               |
-|------------|--------|---------------------------------------------------------------------------|
-| id         | int    | the subject's id                                                          |
-| session    | int    | the subject's year                                                        |
-| link       | string | the subject's official download link                                      |
-| difficulty | int    | the subject's [estimated difficulty](/api/subjects?id=subject-difficulty) |
-| flags      | int    | the subject's [flags](/api/subjects?id=subject-flags)                     |
-| exercises  | object | the subject's [parsed exercises](/api/subjects?id=exercise-object)        |
+| Field        | Type   | Description                                                               |
+|--------------|--------|---------------------------------------------------------------------------|
+| `id`         | int    | the subject's id                                                          |
+| `session`    | int    | the subject's year                                                        |
+| `link`       | string | the subject's official download link                                      |
+| `difficulty` | int    | the subject's [estimated difficulty](/api/subjects?id=subject-difficulty) |
+| `flags`      | int    | the subject's [flags](/api/subjects?id=subject-flags)                     |
+| `exercises`  | object | the subject's [parsed exercises](/api/subjects?id=exercise-object)        |
 
 ### Subject Example
 
@@ -78,14 +78,14 @@ Represents each exercises of a given subject. Only two instances are given in th
 
 ### Exercise Structure
 
-| Field    | Type   | Description                                                                   |
-|----------|--------|-------------------------------------------------------------------------------|
-| id       | int    | the exercise's id                                                             |
-| type     | int    | the exercise's [question type](/api/subjects?id=exercise-type)                |
-| topic    | string | the exercise's thematic                                                       |
-| question | string | the exercise's markdown parsed question                                       |
-| asserts  | array  | the exercise's [asserts](/api/subjects?id=asserts-sub-structure), if provided |                        
-| program  | string | the exercise's Python parsed program, if provided                             |
+| Field      | Type   | Description                                                                   |
+|------------|--------|-------------------------------------------------------------------------------|
+| `id`       | int    | the exercise's id                                                             |
+| `type`     | int    | the exercise's [question type](/api/subjects?id=exercise-type)                |
+| `topic`    | string | the exercise's thematic                                                       |
+| `question` | string | the exercise's markdown parsed question                                       |
+| `asserts`  | array  | the exercise's [asserts](/api/subjects?id=asserts-sub-structure), if provided |                        
+| `program`  | string | the exercise's Python parsed program, if provided                             |
 
 ### Exercise Type
 

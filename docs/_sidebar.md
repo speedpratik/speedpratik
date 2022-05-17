@@ -7,3 +7,4 @@
   - [Introduction](api/introduction.md)
   - [Users](api/users.md)
   - [Subjects](api/subjects.md)
+  - [Leaderboards](api/leaderboards.md)
