@@ -1,10 +1,11 @@
 <template>
-  <article>
-    <p>Content</p>
-  </article>
+	<main>
+		<p>Content</p>
+	</main>
 </template>
+
 <script>
 export default {
-  name: 'MainContent'
+	name: "MainContent"
 }
 </script>

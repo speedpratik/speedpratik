@@ -5,6 +5,7 @@
     align-items: center;
     padding: 0 3vw;
     justify-content: space-between;
+    height: 100px;
 }
 
 #navbar ul {
@@ -16,8 +17,14 @@
 }
 #navbar ul * { font-family: 'Jost', sans-serif; }
 
+#navbar li {
+    display: flex;
+    align-items: center;
+}
+
 #navbar img {
     width: 20%;
+    cursor: pointer;
 }
 
 #navbar ul.userContent li:first-child {
@@ -32,14 +39,14 @@
     font-size: larger;
 }
 #navbar ul.userContent li:first-child span {
-    margin-right: 1vw;
+    margin-right: 1pc;
     text-overflow: ellipsis;
     max-width: 150px;
     overflow: hidden;
 }
 
 #navbar ul.userContent img {
-    width: 70px;
+    width: 60px;
     border-radius: 100%;
     border: 2px solid var(--main-purple)
 }
