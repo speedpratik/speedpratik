@@ -9,12 +9,17 @@
         <span>IwenLeGoat</span>
         <img src="basicAvatar.svg" alt="Avatar">
       </li>
-      <li><button>Connexion</button></li>
+      <li><button @click="login">Connexion</button></li>
     </ul>
   </section>
 </template>
 <script>
 export default {
-  name: 'NavbarSP'
+  name: 'NavbarSP',
+  methods: {
+    login () {
+      this.$router.push('/login')
+    }
+  }
 }
 </script>
