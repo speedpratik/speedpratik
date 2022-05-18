@@ -3,6 +3,7 @@
 
 @import url(./navbar.css);
 @import url(./login.css);
+@import url(./mainPage.css);
 
 :root {
     --main-dark: #1e1f28;
@@ -15,7 +16,7 @@ body {
     background-color: var(--main-dark-lighter);
 }
 
-main { height: calc(100% - 100px); }
+main { height: 100vh; }
 
 .nuxt-progress {
     height: 2px;
@@ -36,7 +37,7 @@ button {
     transition: transform .6s ease, opacity .5s ease;
 }
 button:hover { transform: translateY(-5px); opacity: .8; }
-button:focus { transform: translateY(0); opacity: 1; }
+button:active { transform: translateY(0); opacity: 1; }
 
 
 /* Classes */
@@ -62,5 +63,4 @@ button:focus { transform: translateY(0); opacity: 1; }
 
 @keyframes fadein {
     from { opacity: 0; }
-    to { opacity: 1; }
 }

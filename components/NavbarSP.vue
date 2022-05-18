@@ -2,14 +2,14 @@
 	<section id="navbar">
 		<ul>
 			<li>
-				<img @click="home" src="icon.svg" loading="lazy" />
+				<img @click="home" src="icon.svg" draggable="false" loading="lazy" />
 			</li>
 		</ul>
 
 		<ul class="userContent">
 			<li v-if="this.$auth.loggedIn">
-				<span>{{ userDetails.username }}</span>
-				<img :src="userDetails.avatar" alt="Avatar" />
+				<span v-if="userDetails">{{ userDetails.username }}</span>
+				<img v-if="userDetails" :src="userDetails.avatar" alt="Avatar" loading="lazy" />
 			</li>
 			<li v-else>
 				<button @click="login">Connexion</button>
@@ -21,35 +21,42 @@
 <script>
 export default {
 	name: "NavbarSP",
-	data: () => {
-		const userDetails = {
-			id: 36234,
-			username: "bob",
-			email: "bob@example.com",
-			avatar: "basicAvatar.svg",
-			flags: 0,
-			account_creation: 1652817097,
-			completed_subjects: 21,
-			completed_exercises: 45,
-			accumulated_time: 18842,
-			achievements: {},
-			trophies: {},
-			xp: 8327,
-			level: 15
+	data() {
+		return { 
+			userDetails: null
 		}
+	},
 
-		return { userDetails }
+	mounted () {
+		const details = this.getUserDetails();
+		this.userDetails = details;
 	},
 
 	methods: {
 		login() { 
-			this.$nuxt.$loading.start();
-			setTimeout(() => { 
-				this.$router.push("/login");
-				this.$nuxt.$loading.finish();
-			}, 200); 
+			this.$router.push("/login");
 		},
-		home() { this.$router.push("/"); }
+		home() { 
+			this.$router.push("/");
+		},
+
+		getUserDetails() {
+			return {
+				id: 36234,
+				username: "bob",
+				email: "bob@example.com",
+				avatar: "basicAvatar.svg",
+				flags: 0,
+				account_creation: 1652817097,
+				completed_subjects: 21,
+				completed_exercises: 45,
+				accumulated_time: 18842,
+				achievements: {},
+				trophies: {},
+				xp: 8327,
+				level: 15
+			}
+		}
 	}
 }
 </script>

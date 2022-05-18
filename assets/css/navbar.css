@@ -20,6 +20,7 @@
 #navbar li {
     display: flex;
     align-items: center;
+    animation: fadein 1.5s ease;
 }
 
 #navbar img {
@@ -27,6 +28,8 @@
     cursor: pointer;
 }
 
+
+#navbar ul.userContent li { animation: fadein 2.5s ease; }
 #navbar ul.userContent li:first-child {
     user-select: none;
     display: flex;
@@ -47,6 +50,7 @@
 
 #navbar ul.userContent img {
     width: 60px;
+    height: 60px;
     border-radius: 100%;
     border: 2px solid var(--main-purple)
 }
