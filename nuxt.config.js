@@ -3,7 +3,7 @@ export default {
   head: {
     title: 'Speedpratik',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'fr'
     },
     meta: [
       { charset: 'utf-8' },
@@ -23,6 +23,10 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+  ],
+
+  serverMiddleware: [
+    '~/api/index'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

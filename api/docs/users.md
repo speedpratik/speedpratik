@@ -13,6 +13,7 @@ Represents the accessible user specifications.
 | `email`               | string | the user's email                                             |
 | `avatar`              | string | the user's avatar link                                       |
 | `flags`               | string | the user's flags                                             |
+| `oauth2`              | object | the user's Oauth methods                                     |
 | `account_creation`    | int    | the user's account creation timestamp                        |
 | `completed_subjects`  | array  | the user's array of their completed subjects attempts IDs    |
 | `completed_exercises` | array  | the user's array of their completed exercises attempts IDs   |
@@ -20,16 +21,16 @@ Represents the accessible user specifications.
 | `achievements`        | object | the user's [achievements](/api/users?id=achievements-object) |
 | `trophies`            | object | the user's [trophies](/api/users?id=trophies-object)         |
 | `xp`                  | int    | the user's experience points for leveling system             |
-| `level`               | int    | the user's level according to their XP                       |          |
+| `level`               | int    | the user's level according to their XP                       |
 
-### Example user
+#### Example user
 
 ```json
 {
   "id": 36234,
   "username": "bob",
   "email": "bob@example.com",
-  "avatar": "5224a2ab15b72be48eac35a9412f44e8",
+  "avatar": "https://example.com/avatar.png",
   "flags": 0,
   "account_creation": 1652817097,
   "completed_subjects": 21,
@@ -42,16 +43,38 @@ Represents the accessible user specifications.
 }
 ```
 
-### User flags
+#### User flags
 
 | Value    | Name  | Description             |
 |----------|-------|-------------------------|
 | `1 << 0` | ADMIN | Website's administrator |
 
-## Achievements Object
 
-TBD
+### Get user
+#### `GET /users/{user.id}`
 
-## Trophies Object
+Returns the user object of given ID.
 
-TBD
+### Create user
+#### `POST /users`
+
+Creates non-existent user (if the mail is unique) with the following JSON parameters:
+
+| Value      | Type   | Description              |
+|------------|--------|--------------------------|
+| `username` | string | the user's username      |
+| `email`    | string | the user's email         |
+| `oauth2`   | object | the user's Oauth methods |
+| `avatar`   | string | the user's avatar link   |
+
+The created (or not) user is then returned as the user structure previously mentioned.
+
+### Modify user
+#### `PATCH /users/{user.id}`
+
+Modifies existent user of given ID. Can match all User Structure fields except id and email.
+
+### Delete user
+#### `DELETE /users/{user.id}`
+
+Deletes existent user of given ID.

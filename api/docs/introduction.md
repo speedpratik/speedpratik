@@ -11,6 +11,11 @@
 
 ### Changes made
 
+#### 18-05-2022-1
+
+- Added endpoints URL to Users Resources
+- Moved docs below API
+
 #### 17-05-2022-1
 
 - Added Leaderboards endpoint
