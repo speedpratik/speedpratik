@@ -15,7 +15,27 @@
 				<h2>Sujet #{{ quotiChallengeNumber }}</h2>
 				<span>Les exercices quotidiens sont des exercices d’épreuve pratique niveau rouge rapportant un nombre de point supérieur aux exercices de base.</span>
 			</article>
-			<article class="right"></article>
+
+
+			<article class="right">
+				<section class="modes" id="sr">
+					<h1>Mode Speedrun</h1>
+					<span>Complétez un exercice aléatoire de la manière la plus rapide possible!</span>
+					<button>Commencer</button>
+				</section>
+
+				<section class="modes" id="comp">
+					<h1>Mode Competitif</h1>
+					<span>Complétez un exercice aléatoire dans le but de gagner des points!</span>
+					<button>Commencer</button>
+				</section>
+
+				<section class="modes" id="train">
+					<h1>Mode pratique</h1>
+					<span>Révisez vos épreuves pratique sans vous mettre la pression.</span>
+					<button>Commencer</button>
+				</section>
+			</article>
 		</section>
 	</main>
 </template>
