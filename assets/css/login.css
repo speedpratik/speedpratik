@@ -14,6 +14,8 @@ main.login {
 
     font-family: 'Jost', sans-serif;
     color: white;
+
+    animation: coming 1.5s ease;
 }
 
 #loginContainer h1 {
@@ -24,7 +26,11 @@ main.login {
     font-style: italic;
 }
 
-#loginContainer .svg-inline--fa { margin-right: 5px; }
+#loginContainer .svg-inline--fa { 
+    margin-right: 5px; 
+    width: 20px;
+    animation: fadein 1.5s ease;
+}
 
 #loginContainer span { 
     opacity: .5;
@@ -46,8 +52,7 @@ main.login {
 #loginContainer button.disc { background-color: #5865F2; }
 #loginContainer button.inst { background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);  }
 #loginContainer button.goog { background-color: #f4f8ff; color: #333; }
-#loginContainer button.gith { background-color: #4b4b4b; }
-
+#loginContainer button.gith { background-color: #3b3b3b; }
 
 
 @media screen and (max-width: 1440px) {
