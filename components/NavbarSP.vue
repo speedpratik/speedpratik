@@ -27,34 +27,29 @@ export default {
 		}
 	},
 
+
 	mounted () {
+		/* Récupère les détails de l'utilisateur */
 		const details = this.getUserDetails();
 		this.userDetails = details;
 	},
 
-	methods: {
-		login() { 
-			this.$router.push("/login");
-		},
-		home() { 
-			this.$router.push("/");
-		},
 
+	/* Fonctions */
+	methods: {
+		/* Redirige sur la page de connexion */
+		login() { this.$router.push("/login"); },
+
+		/* Retourne sur la page d'accueil */
+		home() { this.$router.push("/"); },
+
+		/* Récupère les infos utilisateur */
 		getUserDetails() {
 			return {
-				id: 36234,
+				// ... //
 				username: "bob",
-				email: "bob@example.com",
 				avatar: "basicAvatar.svg",
-				flags: 0,
-				account_creation: 1652817097,
-				completed_subjects: 21,
-				completed_exercises: 45,
-				accumulated_time: 18842,
-				achievements: {},
-				trophies: {},
-				xp: 8327,
-				level: 15
+				// ... //
 			}
 		}
 	}

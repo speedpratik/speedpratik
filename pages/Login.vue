@@ -7,8 +7,6 @@
 			<h1>Connectez-vous a l'aide de ces services</h1>
 			<span>Pas besoin de vous inscrire, vos données seront directement récupérées sur le site que vous utiliserez pour vous connecter!</span>
 			<ul>
-				<!-- <li>CONNECTED: {{ this.$auth.loggedIn }}</li>
-				<li>USER: {{ this.$auth.user }}</li> -->
 				<li><button class="disc" @click="discordAuth"><i class="fa-brands fa-discord"></i> Discord</button></li>
 				<li><button class="inst" disabled><i class="fa-brands fa-instagram"></i> Instagram</button></li>
 				<li><button class="goog" disabled><i class="fa-brands fa-google"></i> Google</button></li>
