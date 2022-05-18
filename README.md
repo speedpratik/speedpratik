@@ -5,7 +5,7 @@ Login page
 ![Login page](https://user-images.githubusercontent.com/29103374/169101863-439cb55d-155c-41d2-93d8-b1c6431c5fb7.png)
 
 Main page (WIP)
-![image](https://user-images.githubusercontent.com/29103374/169101999-d496f583-5d90-4904-bb25-91da2b617f92.png)
+![image](https://user-images.githubusercontent.com/29103374/169144858-acc9cf48-6b11-4497-a5fa-5f4de2daad7d.png)
 
 
 ## Build Setup
