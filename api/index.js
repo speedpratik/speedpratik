@@ -16,16 +16,6 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 
 require('./users')(app, db)
 
-// Redirect to docs
-app.get('/', (req, res) => {
-  res.redirect('/api/docs')
-})
-
-app.get('/docs', (req, res) => {
-  // eslint-disable-next-line node/no-path-concat
-  res.sendFile(__dirname + '/docs/index.html')
-})
-
 // Allow for 404 errors
 app.use((req, res) => {
   res.sendStatus(404)
