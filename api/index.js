@@ -27,7 +27,7 @@ app.get('/docs', (req, res) => {
 })
 
 // Allow for 404 errors
-app.use((req, res, next) => {
+app.use((req, res) => {
   res.sendStatus(404)
 })
 
