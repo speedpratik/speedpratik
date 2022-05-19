@@ -9,7 +9,12 @@
 		<ul class="userContent">
 			<li v-if="this.$auth.loggedIn">
 				<span v-if="userDetails">{{ userDetails.username }}</span>
-				<img v-if="userDetails" :src="userDetails.avatar" alt="Avatar" loading="lazy" />
+				<img v-if="userDetails" @click="dropDown = true" :src="userDetails.avatar" alt="Avatar" id="navAvatar" loading="lazy" />
+
+				<ul v-if="dropDown" data-linked="navAvatar" v-click-outside id="dropdown">
+					<li>Profil</li>
+					<li class="hoverRed" @click="logout">Déconnexion</li>
+				</ul>
 			</li>
 			<li v-else>
 				<button @click="login">Connexion</button>
@@ -23,7 +28,8 @@ export default {
 	name: "NavbarSP",
 	data() {
 		return { 
-			userDetails: null
+			userDetails: null,
+			dropDown: false
 		}
 	},
 
@@ -39,6 +45,9 @@ export default {
 	methods: {
 		/* Redirige sur la page de connexion */
 		login() { this.$router.push("/login"); },
+		
+		/* Déconnecte l'utilisateur */
+		logout() { this.$auth.logout(); },
 
 		/* Retourne sur la page d'accueil */
 		home() { this.$router.push("/"); },
