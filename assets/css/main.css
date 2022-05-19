@@ -1,11 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Jost:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Koulen&display=swap');
 
 @import url(./navbar.css);
+@import url(./login.css);
+@import url(./mainPage.css);
 
 :root {
-    --main-dark: #363844;
-    --main-dark-lighter: #484956;
+    --main-dark: #1e1f28;
+    --main-dark-lighter: #292b35;
     --main-purple: #B17AF8;
+    --main-red: #ff4141;
 }
 
 body { 
@@ -13,6 +17,12 @@ body {
     background-color: var(--main-dark-lighter);
 }
 
+main { height: 100vh; }
+
+.nuxt-progress {
+    height: 2px;
+    background-color: var(--main-purple);
+}
 
 /* Elements HTML */
 button {
@@ -28,3 +38,30 @@ button {
     transition: transform .6s ease, opacity .5s ease;
 }
 button:hover { transform: translateY(-5px); opacity: .8; }
+button:active { transform: translateY(0); opacity: 1; }
+
+
+/* Classes */
+.waves {
+    position: fixed;
+    bottom: 0;
+    z-index: -1;
+    opacity: .15;
+}
+
+
+/* Animations */
+@keyframes coming {
+    from {
+        opacity: 0;
+        transform: translateY(35%);
+    }
+    to {
+        opacity: 1;
+        transform: 0;
+    }
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+}
