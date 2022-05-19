@@ -35,6 +35,8 @@
 					<span>Révisez vos épreuves pratique sans vous mettre la pression.</span>
 					<button>Commencer</button>
 				</section>
+				
+				<StatsWindow />
 			</article>
 		</section>
 	</main>
@@ -43,6 +45,8 @@
 
 <script>
 import NavbarSP from "~/components/NavbarSP.vue"
+import StatsWindow from "~/components/StatsWindow.vue"
+
 export default {
 	name: "IndexPage",
 	data() {
@@ -101,6 +105,6 @@ export default {
 
 
 	/* Components */
-	components: { NavbarSP }
+	components: { NavbarSP, StatsWindow }
 }
 </script>
