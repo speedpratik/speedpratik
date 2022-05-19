@@ -10,6 +10,7 @@ Represents the main topic of SpeedPratik being the exam subjects it focuses on.
 |--------------|--------|---------------------------------------------------------------------------|
 | `id`         | int    | the subject's id                                                          |
 | `session`    | int    | the subject's year                                                        |
+| `number`     | int    | the subject's official numbering                                          |
 | `link`       | string | the subject's official download link                                      |
 | `difficulty` | int    | the subject's [estimated difficulty](/api/subjects?id=subject-difficulty) |
 | `flags`      | int    | the subject's [flags](/api/subjects?id=subject-flags)                     |
