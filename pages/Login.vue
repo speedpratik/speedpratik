@@ -1,5 +1,5 @@
 <template>
-	<main class="login">
+	<main class="login" v-if="!this.$auth.loggedIn">
 		<!-- Navbar -->
 		<NavbarSP />
 
@@ -23,10 +23,13 @@ export default {
 	name: "LoginPage",
 	components: { NavbarSP },
 
-	methods: {
-		discordAuth() { this.$auth.loginWith("discord"); },
+	created () {
+		/* Empêche les utilisateurs connectés d'interargir avec la page */
+		if (this.$auth.loggedIn) this.$router.push("/");
+	},
 
-		logout() { this.$auth.logout(); }
+	methods: {
+		discordAuth() { this.$auth.loginWith("discord"); }
 	}
 }
 </script>
