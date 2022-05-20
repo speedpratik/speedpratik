@@ -70,9 +70,9 @@ Creates non-existent user (if the mail is unique) with the following JSON parame
 The created (or not) user is then returned as the user structure previously mentioned.
 
 ### Modify user
-#### `PATCH /users/{user.id}`
+#### `PUT /users/{user.id}`
 
-Modifies existent user of given ID. Can match all User Structure fields except id and email.
+Modifies existent user of given ID. Can match all User Structure fields except id and email. Returns updated user object.
 
 ### Delete user
 #### `DELETE /users/{user.id}`
