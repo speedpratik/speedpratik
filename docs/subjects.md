@@ -16,7 +16,7 @@ Represents the main topic of SpeedPratik being the exam subjects it focuses on.
 | `flags`      | int    | the subject's [flags](/api/subjects?id=subject-flags)                     |
 | `exercises`  | object | the subject's [parsed exercises](/api/subjects?id=exercise-object)        |
 
-### Subject Example
+#### Subject Example
 
 The exercise structure in this example is later explained.
 
@@ -55,7 +55,7 @@ The exercise structure in this example is later explained.
 }
 ```
 
-### Subject difficulty
+#### Subject difficulty
 
 The difficulty is merely an estimation and may be subjective. User feedback should be implemented.
 
@@ -65,7 +65,7 @@ The difficulty is merely an estimation and may be subjective. User feedback shou
 |   1   | Normal subject |
 |   2   | Hard subject   |
 
-### Subject flags
+#### Subject flags
 
 | Value    | Name   | Description                                                    |
 |----------|--------|----------------------------------------------------------------|
@@ -73,28 +73,34 @@ The difficulty is merely an estimation and may be subjective. User feedback shou
 | `1 << 1` | HEBDO  | Weekly selected subject                                        |
 | `1 << 2` | DAILY  | Daily selected subject                                         |
 
-## Exercise Object
+### Get subject
+#### `GET /subjects`
 
-Represents each exercises of a given subject. Only two instances are given in the 2022's subjects. They each focus on a peculiar topic and have different questions, them being either on the making of a new function or on an uncompleted one with gaps to fill.
+Returns the first 100 retrieved subjects from the database.
 
-### Exercise Structure
+#### `GET /subjects/id/{subject.id}`
 
-| Field      | Type   | Description                                                                   |
-|------------|--------|-------------------------------------------------------------------------------|
-| `id`       | int    | the exercise's id                                                             |
-| `type`     | int    | the exercise's [question type](/api/subjects?id=exercise-type)                |
-| `topic`    | string | the exercise's thematic                                                       |
-| `question` | string | the exercise's markdown parsed question                                       |
-| `asserts`  | array  | the exercise's [asserts](/api/subjects?id=asserts-sub-structure), if provided |                        
-| `program`  | string | the exercise's Python parsed program, if provided                             |
+Returns the subject object of given ID.
 
-### Exercise Type
+#### `GET /subjects/session/{subject.session}`
 
-| Value | Name                 |
-|:-----:|----------------------|
-|   0   | Function creation    |
-|   1   | Function to complete |
+Returns all subject object of given session.
 
-### Asserts Sub-structure
+#### `GET /subjects/difficulty/{subject.difficulty}`
 
-The asserts sub-structure is represented by a two-dimensional array containing a couple of values being: the function to be tested; and the return value.
+Returns all subject object of [given difficulty](/subjects?id=subject-difficulty).
+
+### Create subject
+#### `POST /subjects`
+
+Creates new subject with the all [subject structure](/subjects?id=subject-structure) fields except for ID. Returns modified subject.
+
+### Modify subject
+#### `PUT /subjects/id/{subject.id}`
+
+Modifies existent subject of given ID. Can match all [subject Structure](/subjects?id=subject-structure) fields except id. Returns modified subject.
+
+### Delete subject
+#### `DELETE /subjects/id/{subject.id}`
+
+Deletes existent subject of given ID.
