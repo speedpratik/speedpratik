@@ -12,8 +12,8 @@ Represents the accessible user specifications.
 | `username`            | string | the user's username, may not be unique                       |
 | `email`               | string | the user's email                                             |
 | `avatar`              | string | the user's avatar link                                       |
-| `flags`               | string | the user's flags                                             |
-| `oauth2`              | object | the user's Oauth methods                                     |
+| `flags`               | int    | the user's flags                                             |
+| `oauth2`              | string | the user's Oauth methods as a string                         |
 | `account_creation`    | int    | the user's account creation timestamp                        |
 | `completed_subjects`  | array  | the user's array of their completed subjects attempts IDs    |
 | `completed_exercises` | array  | the user's array of their completed exercises attempts IDs   |
