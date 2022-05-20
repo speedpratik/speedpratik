@@ -18,7 +18,6 @@ module.exports = (db) => {
         if (err) {
           return reject(err)
         }
-        console.log(rows)
         resolve(rows)
       })
     })
@@ -34,6 +33,28 @@ module.exports = (db) => {
           return resolve(null)
         }
         resolve(row)
+      })
+    })
+  }
+
+  module.getBySession = (session) => {
+    return new Promise((resolve, reject) => {
+      db.all('SELECT * FROM subjects WHERE session=? LIMIT 100', [session], (err, rows) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(rows)
+      })
+    })
+  }
+
+  module.getByDifficulty = (difficulty) => {
+    return new Promise((resolve, reject) => {
+      db.all('SELECT * FROM subjects WHERE difficulty=? LIMIT 100', [difficulty], (err, rows) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(rows)
       })
     })
   }
@@ -64,6 +85,17 @@ module.exports = (db) => {
       [subject.session, subject.number, subject.link, subject.difficulty, subject.flags])
 
     return await module.getBySessionAndNumber(subject.session, subject.number) // Returns the newly created subject object
+  }
+
+  module.modify = async (subject) => {
+    db.run('UPDATE subjects SET session=?, number=?, link=?, difficulty=?, flags=? WHERE id=?',
+      [subject.session, subject.number, subject.link, subject.difficulty, subject.flags, subject.id])
+
+    return await module.getByID(subject.id)
+  }
+
+  module.delete = (id) => {
+    db.run('DELETE FROM subjects WHERE id=?', [id])
   }
 
   return module

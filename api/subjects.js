@@ -15,6 +15,16 @@ module.exports = (app, db) => {
     }
   })
 
+  app.get('/subjects/session/:session', async (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+    res.end(JSON.stringify(await db.subjects.getBySession(req.params.session)))
+  })
+
+  app.get('/subjects/difficulty/:difficulty', async (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+    res.end(JSON.stringify(await db.subjects.getByDifficulty(req.params.difficulty)))
+  })
+
   app.post('/subjects', async (req, res) => {
     const subject = {
       session: req.body.session,
@@ -31,5 +41,21 @@ module.exports = (app, db) => {
 
     res.setHeader('Content-Type', 'application/json')
     res.end(JSON.stringify(await db.subjects.create(subject)))
+  })
+
+  app.put('/subjects/id/:subjectId', async (req, res) => {
+    const subject = await db.subjects.getByID(req.params.subjectId)
+
+    if (!subject) {
+      return res.sendStatus(404)
+    }
+
+    res.setHeader('Content-Type', 'application/json')
+    res.end(JSON.stringify(await db.subjects.modify({ ...subject, ...req.body })))
+  })
+
+  app.delete('/subjects/id/:subjectId', (req, res) => {
+    db.subjects.delete(req.params.subjectId)
+    res.sendStatus(204)
   })
 }
