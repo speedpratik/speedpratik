@@ -21,7 +21,7 @@ module.exports = (db) => {
   }
 
   module.get = (id) => {
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve, reject) => {
       db.get('SELECT * FROM users WHERE id=?', id, (err, row) => {
         if (err) {
           return reject(err)
@@ -35,7 +35,7 @@ module.exports = (db) => {
   }
 
   module.getByEmail = (email) => {
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve, reject) => {
       db.get('SELECT * FROM users WHERE email=?', email, (err, row) => {
         if (err) {
           return reject(err)
