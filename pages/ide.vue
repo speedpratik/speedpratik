@@ -1,12 +1,10 @@
 <template>
     <main>
-        <!-- Navbar -->
-        <NavbarSP />
-
         <section v-if="id != null">
-            <span class="announcement" v-if="!this.$auth.loggedIn">Tu n'es pas connecté! Tes performances ne seront pas enregistrées.</span>
             <article id="ide">
                 <section id="consigne">
+                    <span class="announcement" v-if="!this.$auth.loggedIn">Tu n'es pas connecté! Tes performances ne seront pas enregistrées.</span>
+
                     <ul v-for="exercice of exercise.exercises">
                         <li class="enonce">
                             <h1>{{ exercice.topic }}</h1>
@@ -21,10 +19,9 @@
                 </section>
 
                 <section id="interface">
+
                     <ul v-for="exercice of exercise.exercises">
-                        <textarea class="ide" cols="30" rows="10">
-                            {{ exercice.program != null ? exercice.program : "" }}
-                        </textarea>
+                        <textarea class="ide" cols="30" rows="10">{{ exercice.program != null ? exercice.program : "" }}</textarea>
                     </ul>
                 </section>
             </article>
@@ -36,12 +33,7 @@
 import NavbarSP from "~/components/NavbarSP.vue"
 export default {
     name: "Ide",
-    head() {
-        return {
-            title: `Speedpratik | Exercice`
-        }
-    },
-
+    head() { return { title: `Speedpratik | Exercice` }},
     data() {
         /* Contenu à render dans la page */
         return {
@@ -50,22 +42,41 @@ export default {
         }
     },
 
-    mounted () {
-        const ID = localStorage.getItem("idSubject");
-        localStorage.removeItem("idSubject");
-        this.id = ID;
-
-        /* Empêche les utilisateurs d'avoir accès à la page sans ID */
-		if (ID == null) this.$router.push("/");
-    },
-
     async fetch() {
         const exercise = this.getExerciseFromId();
         this.exercise = exercise;
     },
 
+    async mounted () {
+        const ID = localStorage.getItem("idSubject");
+        localStorage.removeItem("idSubject");
+        this.id = ID;
+
+        /* Charge pyodide */
+        const pyodideScr = document.createElement("script");
+        pyodideScr.setAttribute("src", "https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js");
+        document.head.appendChild(pyodideScr);
+
+        const pyodide = await this.initPyodide();
+
+
+        /* Empêche les utilisateurs d'avoir accès à la page sans ID */
+		if (ID == null) this.$router.push("/");
+    },
+
+
     /* Fonctions */
     methods: {
+        /* Initialise pyodide pour exec du python */
+        initPyodide(){
+            return new Promise(async (res, rej) => {
+                let pyodide = await loadPyodide();
+                return res(pyodide);
+            });
+        },
+
+
+        /* Récupère un exercice depuis l'id de celui-ci */
         getExerciseFromId(id) {
             return {
                 "id": 1,

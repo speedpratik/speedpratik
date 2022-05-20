@@ -1,6 +1,6 @@
 #ide {
     display: flex;
-    height: calc(100vh - 100px);
+    height: 100vh;
 }
 
 #ide section {
@@ -13,11 +13,11 @@
     font-family: 'Jost', sans-serif;
     background-color: rgba(0, 0, 0, 0.1);
     color: white;
-    padding: 1vh 2vw;
     overflow-y: auto;
 }
 #ide section:first-child > ul { padding: 0; margin: 0; list-style-type: none; }
 #ide section:first-child .enonce { 
+    padding: 1vh 2vw;
     margin-bottom: 3vh; 
     display: flex; 
     flex-direction: column; 
