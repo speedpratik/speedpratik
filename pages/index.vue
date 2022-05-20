@@ -9,13 +9,12 @@
 				<div class="daily">
 					<span>Prochain exercice dans</span>
 					<h2>{{ timeLeft }}</h2>
-					<button>Compléter</button>
+					<button @click="startExercise(true)">Compléter</button>
 				</div>
 				<h1>Exercice Quotidien</h1>
 				<h2>Sujet #{{ quotiChallengeNumber }}</h2>
 				<span>Les exercices quotidiens sont des exercices d’épreuve pratique niveau rouge rapportant un nombre de point supérieur aux exercices de base.</span>
 			</article>
-
 
 			<article class="right">
 				<section class="modes" id="sr">
@@ -35,7 +34,7 @@
 					<span>Révisez vos épreuves pratique sans vous mettre la pression.</span>
 					<button>Commencer</button>
 				</section>
-				
+
 				<StatsWindow />
 			</article>
 		</section>
@@ -91,12 +90,24 @@ export default {
 			return { seconds, minutes, hours };
 		},
 
+		/* Redirige vers la page d'IDE */
+		startExercise(daily = false) {
+			let id;
+			if (daily) id = this.getTodayExercise().id;
+			else id = 1;
+
+
+			localStorage.setItem("idSubject", id);
+			this.$router.push("/ide");
+		},
+
 		/* Récupère l'exercice quotidien */
 		getTodayExercise() {
 
 			// A ADD: Calcul pour choisir l'exo quotidien comme ça pas besoin d'encombrer tout
 			return {
 				// ... //
+				id: 1,
 				number: "33178",
 				// ... //
 			};

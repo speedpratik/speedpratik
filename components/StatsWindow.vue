@@ -1,5 +1,5 @@
 <template>
-    <section id="stats">
+    <section id="stats" v-if="date != null && userDetails != null">
         <article>
             <span>Compte créé le:</span>
             <h2>{{ ("0" + date.getDate()).slice(-2) + "/" + ("0" + parseInt(date.getMonth() + 1)).slice(-2) + "/" + date.getFullYear() }}</h2>
@@ -67,7 +67,9 @@ export default {
 						avatar: infos.avatarLink
 					});
 					res(req);
-				} catch(e) { rej(e); }
+				} catch(e) { 
+					this.$auth.loginWith(strategy); // Reconnection, erreur
+				}
 			});
 		}
 	}

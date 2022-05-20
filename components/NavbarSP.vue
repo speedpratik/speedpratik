@@ -82,7 +82,9 @@ export default {
 						avatar: infos.avatarLink
 					});
 					res(req);
-				} catch(e) { rej(e); }
+				} catch(e) { 
+					this.$auth.loginWith(strategy); // Reconnection, erreur
+				}
 			});
 		}
 	}

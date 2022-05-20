@@ -4,6 +4,7 @@
 @import url(./navbar.css);
 @import url(./login.css);
 @import url(./mainPage.css);
+@import url(./ide.css);
 
 :root {
     --main-dark: #1e1f28;
@@ -59,6 +60,7 @@ button:active { transform: translateY(0); opacity: 1; }
     background-color: rgba(0, 0, 0, 0.1);
     margin-top: 2vh;
     padding: 2vh 2vw;
+    animation: fadein .5s ease;
 }
 #stats article {
     margin-top: 2vh;
