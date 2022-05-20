@@ -1,6 +1,6 @@
 module.exports = (app, db) => {
   app.get('/users/:userId', async (req, res) => {
-    const user = await db.getUser(req.params.userId)
+    const user = await db.users.get(req.params.userId)
 
     if (user === null) {
       res.sendStatus(404)
@@ -24,22 +24,22 @@ module.exports = (app, db) => {
     }
 
     res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify(await db.createUser(user)))
+    res.end(JSON.stringify(await db.users.create(user)))
   })
 
   app.put('/users/:userId', async (req, res) => {
-    const user = await db.getUser(req.params.userId)
+    const user = await db.users.get(req.params.userId)
 
     if (!user) {
       return res.sendStatus(404)
     }
 
-    await db.modifyUser({ ...user, ...req.body })
-    res.sendStatus(204)
+    res.setHeader('Content-Type', 'application/json')
+    res.end(JSON.stringify(await db.users.modify({ ...user, ...req.body })))
   })
 
   app.delete('/users/:userId', (req, res) => {
-    db.deleteUser(req.params.userId)
+    db.users.delete(req.params.userId)
     res.sendStatus(204)
   })
 }
