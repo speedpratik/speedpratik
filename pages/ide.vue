@@ -8,16 +8,16 @@
             <article id="ide">
                 <section id="consigne">
                     <ul v-for="exercice of exercise.exercises">
-                        <h1>{{ exercice.topic }}</h1>
-                        <span>{{ exercice.question }}</span>
+                        <li class="enonce">
+                            <h1>{{ exercice.topic }}</h1>
+                            <span v-html="$md.render(exercice.question)"></span>
 
-                        <span>Exemples:</span>
-                        <ul v-for="assert of exercice.asserts">
-                            <li>{{ assert[0] }} == {{ assert[1] }}</li>
-                        </ul>
+                            <span>Exemples:</span>
+                            <ul class="asserts" v-for="assert of exercice.asserts">
+                                <li>{{ assert[0] }} == {{ assert[1] }}</li>
+                            </ul>
+                        </li>
                     </ul>
-
-                    <textarea id="output" cols="30" rows="10" readonly></textarea>
                 </section>
 
                 <section id="interface">
