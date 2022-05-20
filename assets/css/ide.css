@@ -27,7 +27,7 @@
     border-bottom: 1px solid black;
 }
 
-#ide code {
+#ide code:not(.editor) {
     padding: 3px 5px;
     background-color: rgba(117, 117, 117, 0.2);
     border-radius: 5px;
@@ -45,4 +45,19 @@
     font-weight: bold;
     font-size: 25px;
     margin-bottom: 0;
+}
+
+#ide .editor {
+    outline: none;
+    border-radius: 5px;
+    padding: 1pc 1pc;
+    font-size: large;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-left: 2pc solid rgba(0, 0, 0, 0.1);
+    max-width: 580px;
+    min-width: 580px;
+    
+    max-height: 225px;
+    height: fit-content;
+    min-height: 100px;
 }

@@ -3,7 +3,10 @@
         <section v-if="id != null">
             <article id="ide">
                 <section id="consigne">
-                    <span class="announcement" v-if="!this.$auth.loggedIn">Tu n'es pas connecté! Tes performances ne seront pas enregistrées.</span>
+                    <span
+                        class="announcement"
+                        v-if="!this.$auth.loggedIn"
+                    >Tu n'es pas connecté! Tes performances ne seront pas enregistrées.</span>
 
                     <ul v-for="exercice of exercise.exercises">
                         <li class="enonce">
@@ -19,9 +22,8 @@
                 </section>
 
                 <section id="interface">
-
                     <ul v-for="exercice of exercise.exercises">
-                        <textarea class="ide" cols="30" rows="10">{{ exercice.program != null ? exercice.program : "" }}</textarea>
+                        <pre><code placeholder="Entrez votre code ici." :id="`editor_${exercice.id}`" class="editor language-python" contenteditable spellcheck="false" @keydown="indentKeyDown">{{ exercice.program != null ? exercice.program : "" }}</code></pre>
                     </ul>
                 </section>
             </article>
@@ -29,16 +31,35 @@
     </main>
 </template>
 
+
 <script>
 import NavbarSP from "~/components/NavbarSP.vue"
+
 export default {
     name: "Ide",
-    head() { return { title: `Speedpratik | Exercice` }},
+    head() {
+        return {
+            title: "Speedpratik | Exercice",
+            link: [
+                { rel: "stylesheet", href: "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/atom-one-dark.min.css" }
+            ],
+            script: [
+                {
+                    src: "https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js", callback: async () => {
+                        this.runner = await loadPyodide();
+                    }
+                },
+                { src: "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js", callback: () => { hljs.highlightAll(); } }
+            ]
+        }
+    },
+
     data() {
         /* Contenu à render dans la page */
         return {
             id: null,
-            exercise: null
+            exercise: null,
+            runner: null
         }
     },
 
@@ -47,34 +68,31 @@ export default {
         this.exercise = exercise;
     },
 
-    async mounted () {
+    async mounted() {
         const ID = localStorage.getItem("idSubject");
         localStorage.removeItem("idSubject");
         this.id = ID;
 
-        /* Charge pyodide */
-        const pyodideScr = document.createElement("script");
-        pyodideScr.setAttribute("src", "https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js");
-        document.head.appendChild(pyodideScr);
-
-        const pyodide = await this.initPyodide();
-
-
         /* Empêche les utilisateurs d'avoir accès à la page sans ID */
-		if (ID == null) this.$router.push("/");
+        if (ID == null) this.$router.push("/");
     },
 
 
     /* Fonctions */
     methods: {
-        /* Initialise pyodide pour exec du python */
-        initPyodide(){
-            return new Promise(async (res, rej) => {
-                let pyodide = await loadPyodide();
-                return res(pyodide);
-            });
-        },
+        /* Indent */
+        indentKeyDown(e) {
 
+            if (e.keyCode == 9) {
+                e.preventDefault();
+                document.execCommand("insertHTML", false, "&#009");
+            }
+
+            // FAIRE EN SORTE QUE CA S'HIGHLIGHT A CHAQUE KEY DOWN ET QUE CA SCROLL EN BAS
+            if (e.keyCode == 13) {
+                hljs.highlightElement(e.target);
+            }
+        },
 
         /* Récupère un exercice depuis l'id de celui-ci */
         getExerciseFromId(id) {
@@ -106,7 +124,7 @@ export default {
                             ["rendu_glouton(68, [], 0)", "[50, 10, 5, 2, 1]"],
                             ["rendu_glouton(291, [], 0)", "[100, 100, 50, 20, 20, 1]"]
                         ],
-                        "program": "Pieces = [100,50,20,10,5,2,1]\ndef rendu_glouton(arendre, solution=[], i=0):\tif arendre == 0:\n\t\treturn ...\n\tp = Pieces[i],\n\tif p <= ... :\n\t\tsolution.append(...)\n\t\treturn rendu_glouton(arendre - p, solution, i)\n\telse :\n\t\treturn rendu_glouton(arendre, solution, ...)"
+                        "program": "Pieces = [100,50,20,10,5,2,1]\ndef rendu_glouton(arendre, solution=[], i=0):\n\tif arendre == 0:\n\t\treturn ...\n\tp = Pieces[i],\n\tif p <= ... :\n\t\tsolution.append(...)\n\t\treturn rendu_glouton(arendre - p, solution, i)\n\telse :\n\t\treturn rendu_glouton(arendre, solution, ...)"
                     }
                 ]
             }
