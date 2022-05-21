@@ -1,5 +1,8 @@
 <template>
     <main>
+        <!-- Navbar -->
+		<NavbarSP />
+
         <section v-if="id != null">
             <article id="ide">
                 <section id="consigne">
@@ -23,9 +26,31 @@
 
                 <section id="interface">
                     <article class="codingArea" v-for="exercice of exercise.exercises">
-                        <div :id="`editor_${exercice.id}`" class="editor">{{ exercice.program != null ? exercice.program : "" }}</div>
-                        <div class="output">>>></div>
+                        <div
+                            :id="`editor_${exercice.id}`"
+                            class="editor"
+                        >{{ exercice.program != null ? exercice.program : "" }}</div>
+                        <ul :id="`output_${exercice.id}`" class="output">
+                            <li>>>></li>
+                        </ul>
                     </article>
+
+                    <section id="footer">
+                        <article>
+                            <h1>Actions</h1>
+                            <button
+                                v-if="runner != null"
+                                @click="execPython(0)"
+                            >Éxecuter première fenêtre de code</button>
+                            <button
+                                v-if="runner != null"
+                                @click="execPython(1)"
+                            >Éxecuter deuxième fenêtre de code</button>
+                        </article>
+                        <article>
+                            <h1>Leaderboard</h1>
+                        </article>
+                    </section>
                 </section>
             </article>
         </section>
@@ -47,9 +72,9 @@ export default {
                 {
                     src: "https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js", callback: async () => {
                         this.runner = await loadPyodide();
-                                
+
                         // On en profite pour set up l'editeur
-                        for (const exercice of this.exercise.exercises){
+                        for (const exercice of this.exercise.exercises) {
                             const editor = new CodeFlask(`#editor_${exercice.id}`, { language: "js", lineNumbers: true });
                             editor.updateCode(this.decodeHtml(editor.getCode()));
 
@@ -84,6 +109,9 @@ export default {
 
         /* Empêche les utilisateurs d'avoir accès à la page sans ID */
         if (ID == null) this.$router.push("/");
+
+        /* Ajoute log a la fenêtre */
+        window.pythonLog = this.log;
     },
 
 
@@ -94,6 +122,33 @@ export default {
             const txt = document.createElement("textarea");
             txt.innerHTML = code;
             return txt.value;
+        },
+
+        log(type, message, output, clear = true) {
+            if (clear) document.getElementById(`output_${output}`).innerHTML = "";
+
+            const log_ = document.createElement("li");
+            log_.innerHTML = `>>> ${message}`;
+            log_.classList.add(type);
+
+            document.getElementById(`output_${output}`).prepend(log_);
+        },
+
+        /* Execute le python */
+        async execPython(editorIndex) {
+            const _code = this.editors[editorIndex].getCode();
+            let codeToExec = `import js\ndef print(content):\tjs.pythonLog("none", repr(content), ${editorIndex + 1}, False)\n${_code}\n`
+
+            const asserts = this.exercise.exercises.filter(ex => ex.id == editorIndex + 1)[0].asserts;
+            asserts.map(assert => { codeToExec += `assert ${assert[0]} == ${assert[1]}, "Ton programme ne passe pas les asserts!"\n`; })
+            codeToExec += `print("Succès!")`
+
+            console.log(codeToExec)
+            try {
+                const exec = await this.runner.runPythonAsync(codeToExec);
+            } catch (e) {
+                this.log("error", e, editorIndex + 1);
+            }
         },
 
         /* Récupère un exercice depuis l'id de celui-ci */
