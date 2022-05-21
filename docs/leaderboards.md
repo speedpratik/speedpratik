@@ -6,18 +6,18 @@ Represents the different leaderboards.
 
 ### Leaderboard Structure
 
-| Field         | Type   | Description                                                                                            |
-|---------------|--------|--------------------------------------------------------------------------------------------------------|
-| `id`          | int    | the leaderboard's id                                                                                   |
-| `frequency`   | int    | the leaderboard's [frequency](/api/leaderboards?id=frequencies) (daily, weekly or special)             |
-| `type`        | int    | the leaderboard's [type](/api/leaderboards?id=types) (time based, amount of exercises...)              |
-| `title`       | string | the leaderboard's display name for special events (`null` otherwise)                                   |
-| `subject`     | int    | the subject's ID if applicable (`null` otherwise, see [types](/api/leaderboards?id=types) for details) |
-| `start_date`  | int    | the leaderboard's starting timestamp                                                                   |
-| `end_date`    | int    | the leaderboard's ending timestamp                                                                     |
-| `active`      | bool   | is the leaderboard active?                                                                             |
-| `rewards`     | object | the leaderboard's reward (achievements, points, xp...)                                                 |
-| `contestants` | array  | the leaderboard's sorted contestants objects array                                                     |
+| Field         | Type   | Description                                                                                        |
+|---------------|--------|----------------------------------------------------------------------------------------------------|
+| `id`          | int    | the leaderboard's id                                                                               |
+| `frequency`   | int    | the leaderboard's [frequency](/leaderboards?id=frequencies) (daily, weekly or special)             |
+| `type`        | int    | the leaderboard's [type](/leaderboards?id=types) (time based, amount of exercises...)              |
+| `title`       | string | the leaderboard's display name for special events (`null` otherwise)                               |
+| `subject`     | int    | the subject's ID if applicable (`null` otherwise, see [types](/leaderboards?id=types) for details) |
+| `start_date`  | int    | the leaderboard's starting timestamp                                                               |
+| `end_date`    | int    | the leaderboard's ending timestamp                                                                 |
+| `active`      | bool   | is the leaderboard active?                                                                         |
+| `rewards`     | object | the leaderboard's reward (achievements, points, xp...)                                             |
+| `contestants` | array  | the leaderboard's sorted contestants objects array                                                 |
 
 ### Leaderboard Example
 
@@ -68,19 +68,19 @@ These types will affect the value of `subject` as it will only be non-null on ti
 
 ### Contestant Structures
 
-There are two different structures with slight changes according to the [type of leaderboard](/api/leaderboards?id=types).
+There are two different structures with slight changes according to the [type of leaderboard](/leaderboards?id=types).
 
 #### Time-based leaderboard
 
-| Field  | Type | Description                                                                        |
-|--------|------|------------------------------------------------------------------------------------|
-| `id`   | int  | the contestant's id corresponding to their [user ID](/api/users?id=user-structure) |
-| `date` | int  | the contestant attempt's date as a timestamp                                       |
-| `time` | int  | the contestant attempt's time in seconds                                           |
+| Field  | Type | Description                                                                    |
+|--------|------|--------------------------------------------------------------------------------|
+| `id`   | int  | the contestant's id corresponding to their [user ID](/users?id=user-structure) |
+| `date` | int  | the contestant attempt's date as a timestamp                                   |
+| `time` | int  | the contestant attempt's time in seconds                                       |
 
 #### Amount of exercises done based leaderboard
 
 | Field       | Type  | Description                                                                                         |
 |-------------|-------|-----------------------------------------------------------------------------------------------------|
-| `id`        | int   | the contestant's id corresponding to their [user ID](/api/users?id=user-structure)                  |
+| `id`        | int   | the contestant's id corresponding to their [user ID](/users?id=user-structure)                      |
 | `exercices` | array | the contestant's array of completed attempts IDs in crescendo order while the leaderboard is active |

@@ -6,22 +6,22 @@ Represents the accessible user specifications.
 
 ### User Structure
 
-| Field                 | Type   | Description                                                  |
-|-----------------------|--------|--------------------------------------------------------------|
-| `id`                  | int    | the user's id                                                |
-| `username`            | string | the user's username, may not be unique                       |
-| `email`               | string | the user's email                                             |
-| `avatar`              | string | the user's avatar link                                       |
-| `flags`               | string | the user's flags                                             |
-| `oauth2`              | object | the user's Oauth methods                                     |
-| `account_creation`    | int    | the user's account creation timestamp                        |
-| `completed_subjects`  | array  | the user's array of their completed subjects attempts IDs    |
-| `completed_exercises` | array  | the user's array of their completed exercises attempts IDs   |
-| `accumulated_time`    | int    | the user's time spent doing any exercises in seconds         |
-| `achievements`        | object | the user's [achievements](/api/users?id=achievements-object) |
-| `trophies`            | object | the user's [trophies](/api/users?id=trophies-object)         |
-| `xp`                  | int    | the user's experience points for leveling system             |
-| `level`               | int    | the user's level according to their XP                       |
+| Field                 | Type   | Description                                                |
+|-----------------------|--------|------------------------------------------------------------|
+| `id`                  | int    | the user's id                                              |
+| `username`            | string | the user's username, may not be unique                     |
+| `email`               | string | the user's email                                           |
+| `avatar`              | string | the user's avatar link                                     |
+| `flags`               | int    | the user's flags                                           |
+| `oauth2`              | string | the user's Oauth methods as a string                       |
+| `account_creation`    | int    | the user's account creation timestamp                      |
+| `completed_subjects`  | array  | the user's array of their completed subjects attempts IDs  |
+| `completed_exercises` | array  | the user's array of their completed exercises attempts IDs |
+| `accumulated_time`    | int    | the user's time spent doing any exercises in seconds       |
+| `achievements`        | object | the user's [achievements](/users?id=achievements-object)   |
+| `trophies`            | object | the user's [trophies](/users?id=trophies-object)           |
+| `xp`                  | int    | the user's experience points for leveling system           |
+| `level`               | int    | the user's level according to their XP                     |
 
 #### Example user
 
@@ -70,9 +70,9 @@ Creates non-existent user (if the mail is unique) with the following JSON parame
 The created (or not) user is then returned as the user structure previously mentioned.
 
 ### Modify user
-#### `PATCH /users/{user.id}`
+#### `PUT /users/{user.id}`
 
-Modifies existent user of given ID. Can match all User Structure fields except id and email.
+Modifies existent user of given ID. Can match all User Structure fields except id and email. Returns updated user object.
 
 ### Delete user
 #### `DELETE /users/{user.id}`

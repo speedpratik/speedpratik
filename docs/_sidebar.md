@@ -3,6 +3,7 @@
   - [Introduction](introduction.md)
   - [Users](users.md)
   - [Subjects](subjects.md)
+    - [Exercises](exercises.md)
   - [Leaderboards](leaderboards.md)
   - [Attempts](attempts.md)
   - [Achievements](achievements.md)

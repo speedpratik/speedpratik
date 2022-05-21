@@ -15,6 +15,8 @@ app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 require('./users')(app, db)
+require('./subjects')(app, db)
+require('./exercises')(app, db)
 
 // Allow for 404 errors
 app.use((req, res) => {
