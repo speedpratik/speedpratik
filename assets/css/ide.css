@@ -8,56 +8,98 @@
     flex-direction: column;
 }
 
-#ide section:first-child {
+#ide section#consigne {
     width: 30%;
     font-family: 'Jost', sans-serif;
     background-color: rgba(0, 0, 0, 0.1);
     color: white;
     overflow-y: auto;
 }
-#ide section:first-child > ul { padding: 0; margin: 0; list-style-type: none; }
-#ide section:first-child .enonce { 
+#ide section#consigne > ul { padding: 0; margin: 0; list-style-type: none; }
+#ide section#consigne .enonce { 
     padding: 1vh 2vw;
     margin-bottom: 3vh; 
     display: flex; 
     flex-direction: column; 
 }
-#ide section:first-child .enonce span:last-of-type {margin-top: 2vh;}
-#ide section:first-child .enonce:first {
+#ide section#consigne .enonce span:last-of-type {margin-top: 2vh;}
+#ide section#consigne .enonce:first {
     border-bottom: 1px solid black;
 }
 
-#ide code:not(.editor) {
+#ide section#consigne code {
     padding: 3px 5px;
     background-color: rgba(117, 117, 117, 0.2);
     border-radius: 5px;
     font-size: 15px;
 }
 
-#ide .asserts {
+#ide section#consigne .asserts {
     list-style-type: none;
     font-family: 'Inconsolata', monospace;
     padding: 0 20px;
 }
 
-
-#ide section:first-child h1 { 
+#ide section#consigne h1 { 
     font-weight: bold;
     font-size: 25px;
     margin-bottom: 0;
 }
 
-#ide .editor {
-    outline: none;
-    border-radius: 5px;
-    padding: 1pc 1pc;
-    font-size: large;
-    background-color: rgba(0, 0, 0, 0.1);
-    border-left: 2pc solid rgba(0, 0, 0, 0.1);
-    max-width: 580px;
-    min-width: 580px;
-    
-    max-height: 225px;
-    height: fit-content;
-    min-height: 100px;
+
+#ide section#interface {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 70%;
+    font-family: 'Jost', sans-serif;
+    color: white;
+    overflow-y: auto;
 }
+
+#ide .codingArea {
+    display: flex;
+    flex-direction: row;
+    width: 95%;
+    justify-content: space-between;
+    margin-top: 2vh;
+    height: 300px;
+    overflow: hidden;
+}
+
+
+#ide .output {
+    width: 40%;
+    flex-shrink: 1;
+    background-color: var(--main-dark);
+    right: 0;
+    border-radius: 3px;
+    padding: 10px 15px;
+}
+
+
+#ide .editor {
+    cursor: default;
+    opacity: 0;
+    width: 20%;
+    min-height: 300px;
+    height: fit-content;
+    max-height: 350px;
+    border-radius: 3px;
+}
+#ide .editor.active {
+    cursor: auto;
+    opacity: 1;
+    animation: fadein .5s ease;
+}
+
+#ide .editor .codeflask {
+    width: 35%;
+    min-height: 300px;
+    height: fit-content;
+    max-height: 350px;
+    border-radius: 3px;
+}
+#ide .editor .codeflask *::selection { background: rgba(0, 0, 0, 0.1); }
+#ide .editor .codeflask * { font-family: 'Inconsolata', monospace; font-size: 15px; }

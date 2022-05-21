@@ -22,9 +22,10 @@
                 </section>
 
                 <section id="interface">
-                    <ul v-for="exercice of exercise.exercises">
-                        <pre><code placeholder="Entrez votre code ici." :id="`editor_${exercice.id}`" class="editor language-python" contenteditable spellcheck="false" @keydown="indentKeyDown">{{ exercice.program != null ? exercice.program : "" }}</code></pre>
-                    </ul>
+                    <article class="codingArea" v-for="exercice of exercise.exercises">
+                        <div :id="`editor_${exercice.id}`" class="editor">{{ exercice.program != null ? exercice.program : "" }}</div>
+                        <div class="output">>>></div>
+                    </article>
                 </section>
             </article>
         </section>
@@ -34,22 +35,29 @@
 
 <script>
 import NavbarSP from "~/components/NavbarSP.vue"
+import CodeFlask from "codeflask"
+
 
 export default {
     name: "Ide",
     head() {
         return {
             title: "Speedpratik | Exercice",
-            link: [
-                { rel: "stylesheet", href: "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/atom-one-dark.min.css" }
-            ],
             script: [
                 {
                     src: "https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js", callback: async () => {
                         this.runner = await loadPyodide();
+                                
+                        // On en profite pour set up l'editeur
+                        for (const exercice of this.exercise.exercises){
+                            const editor = new CodeFlask(`#editor_${exercice.id}`, { language: "js", lineNumbers: true });
+                            editor.updateCode(this.decodeHtml(editor.getCode()));
+
+                            document.getElementById(`editor_${exercice.id}`).classList.add("active");
+                            this.editors.push(editor);
+                        }
                     }
-                },
-                { src: "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js", callback: () => { hljs.highlightAll(); } }
+                }
             ]
         }
     },
@@ -59,7 +67,8 @@ export default {
         return {
             id: null,
             exercise: null,
-            runner: null
+            runner: null,
+            editors: []
         }
     },
 
@@ -80,18 +89,11 @@ export default {
 
     /* Fonctions */
     methods: {
-        /* Indent */
-        indentKeyDown(e) {
-
-            if (e.keyCode == 9) {
-                e.preventDefault();
-                document.execCommand("insertHTML", false, "&#009");
-            }
-
-            // FAIRE EN SORTE QUE CA S'HIGHLIGHT A CHAQUE KEY DOWN ET QUE CA SCROLL EN BAS
-            if (e.keyCode == 13) {
-                hljs.highlightElement(e.target);
-            }
+        /* Decode les caractères encodés */
+        decodeHtml(code) {
+            const txt = document.createElement("textarea");
+            txt.innerHTML = code;
+            return txt.value;
         },
 
         /* Récupère un exercice depuis l'id de celui-ci */
