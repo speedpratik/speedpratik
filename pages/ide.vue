@@ -4,6 +4,29 @@
         <NavbarSP />
 
         <section v-if="id != null">
+            <modal name="submit-modal">
+                <div class="modal-content" v-if="tempsMit != null">
+                    <h1>Bon boulot!</h1>
+
+                    <section>
+                        <article>
+                            <span>Temps écoulé:</span>
+                            <span class="countdown">{{ tempsMit.string }}</span>
+                        </article>
+                        <!-- <article>
+                            <span>{{ errorsCount }} erreur(s).</span>
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                        </article>
+
+                        <article v-if="this.$auth.loggedIn">
+                            <span>+ {{ Math.floor(300 * Math.exp(-2 * tempsMit.time)) }}xp.</span>
+                            <i class="fa-solid fa-flask"></i>
+                        </article> -->
+                    </section>
+
+                    <button @click="$router.push('/')">Retour</button>
+                </div>
+            </modal>
             <canvas id="confettis"></canvas>
 
             <article id="ide">
@@ -103,7 +126,12 @@ export default {
             runner: null,
             editors: [],
             validate: [true, true],
-            canValidate: false
+            canValidate: false,
+
+            // Statistiques
+            startedExercise: new Date(),
+            errorsCount: 0,
+            tempsMit: null
         }
     },
 
@@ -159,8 +187,11 @@ export default {
         /* Execute le python */
         async execPython(editorIndex) {
             const _code = this.editors[editorIndex].getCode();
+
+            // Créer un code personnalisé pour interargir avec le dom aussi
             let codeToExec = `import js\ndef print(content):\tjs.pythonLog("none", repr(content), ${editorIndex + 1}, False)\n${_code}\n`
 
+            // Ajoute les asserts
             const asserts = this.exercise.filter(ex => ex.id == editorIndex + 1)[0].asserts;
             asserts.map(assert => { codeToExec += `assert ${assert[0]} == ${assert[1]}, "Ton programme ne passe pas les asserts!"\n`; })
             codeToExec += `print("Succès!")`;
@@ -171,9 +202,12 @@ export default {
                 this.log("error", e, editorIndex + 1);
                 this.validate[editorIndex] = false;
 
+                this.errorsCount += 1;
+
                 return this.canValidate = this.validate[0] && this.validate[1];
             }
 
+            // Valide le code
             this.validate[editorIndex] = true;
             return this.canValidate = this.validate[0] && this.validate[1];
         },
@@ -190,13 +224,30 @@ export default {
             });
         },
 
+        /* Temps entre deux dates */
+        differenceDate() {
+            const diff = new Date() - this.startedExercise;
+            const date = new Date(diff);
+
+            return {
+                string: date.toISOString().substr(11, 8),
+                time: date.getHours() / 60
+            } 
+        },
 
         /* Valide l'exercice */
         validation() {
             const canvas = document.getElementById("confettis");
             canvas.style.display = "block";
 
-            const duration = 3000;
+            // Assigne les variables
+            this.$modal.show("submit-modal");
+            this.tempsMit = this.differenceDate();
+            this.canValidate = false;
+
+            console.log(this.tempsMit);
+
+            const duration = 2000;
             const end = Date.now() + duration;
 
             const confettis = Confettis.create(canvas, {
@@ -204,6 +255,7 @@ export default {
                 useWorker: true
             });
 
+            // Confettis
             (function frame() {
                 confettis({
                     particleCount: 7,
@@ -219,10 +271,9 @@ export default {
                     origin: { x: 1, y: 0.5 }
                 });
 
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
+                if (Date.now() < end) requestAnimationFrame(frame);
             }());
+
         }
     },
 
