@@ -96,7 +96,7 @@ export default {
             exercise: null,
             runner: null,
             editors: [],
-            validate: [false, true],
+            validate: [false, false],
             canValidate: false
         }
     },
