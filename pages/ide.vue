@@ -47,8 +47,10 @@
                                 @click="execPython(1)"
                             >Éxecuter deuxième fenêtre de code</button>
 
-                            <button v-if="canValidate">Soumettre</button>
-                            <button v-else disabled>Soumettre</button>
+                            <div v-if="runner != null">
+                                <button v-if="canValidate">Soumettre</button>
+                                <button v-else disabled>Soumettre</button>
+                            </div>
                         </article>
                     </section>
                 </section>
