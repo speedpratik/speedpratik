@@ -8,10 +8,13 @@
 @import url(./mainPage.css);
 @import url(./ide.css);
 
+
+*:disabled { cursor: not-allowed; opacity: .5; }
 :root {
     --main-dark: #1e1f28;
     --main-dark-lighter: #292b35;
     --main-purple: #B17AF8;
+    --main-purple-lighter: #cea8ff;
     --main-red: #ff4141;
 }
 

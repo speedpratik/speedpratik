@@ -46,9 +46,9 @@
                                 v-if="runner != null"
                                 @click="execPython(1)"
                             >Éxecuter deuxième fenêtre de code</button>
-                        </article>
-                        <article>
-                            <h1>Leaderboard</h1>
+
+                            <button v-if="canValidate">Soumettre</button>
+                            <button v-else disabled>Soumettre</button>
                         </article>
                     </section>
                 </section>
@@ -93,7 +93,9 @@ export default {
             id: null,
             exercise: null,
             runner: null,
-            editors: []
+            editors: [],
+            validate: [false, true],
+            canValidate: false
         }
     },
 
@@ -112,6 +114,9 @@ export default {
 
         /* Ajoute log a la fenêtre */
         window.pythonLog = this.log;
+
+        /* Initialise la variable CanValidate */
+        this.canValidate = this.validate[0] && this.validate[1];
     },
 
 
@@ -124,6 +129,7 @@ export default {
             return txt.value;
         },
 
+        /* Log dans les outputs le python */
         log(type, message, output, clear = true) {
             if (clear) document.getElementById(`output_${output}`).innerHTML = "";
 
@@ -141,14 +147,19 @@ export default {
 
             const asserts = this.exercise.exercises.filter(ex => ex.id == editorIndex + 1)[0].asserts;
             asserts.map(assert => { codeToExec += `assert ${assert[0]} == ${assert[1]}, "Ton programme ne passe pas les asserts!"\n`; })
-            codeToExec += `print("Succès!")`
+            codeToExec += `print("Succès!")`;
 
-            console.log(codeToExec)
             try {
-                const exec = await this.runner.runPythonAsync(codeToExec);
+                await this.runner.runPythonAsync(codeToExec);
             } catch (e) {
                 this.log("error", e, editorIndex + 1);
+                this.validate[editorIndex] = false;
+
+                return this.canValidate = this.validate[0] && this.validate[1];
             }
+
+            this.validate[editorIndex] = true;
+            return this.canValidate = this.validate[0] && this.validate[1];
         },
 
         /* Récupère un exercice depuis l'id de celui-ci */
