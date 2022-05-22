@@ -11,7 +11,7 @@
                         v-if="!this.$auth.loggedIn"
                     >Tu n'es pas connecté! Tes performances ne seront pas enregistrées.</span>
 
-                    <ul v-for="exercice of exercise.exercises">
+                    <ul v-for="exercice of exercise">
                         <li class="enonce">
                             <h1>{{ exercice.topic }}</h1>
                             <span v-html="$md.render(exercice.question)"></span>
@@ -25,11 +25,9 @@
                 </section>
 
                 <section id="interface">
-                    <article class="codingArea" v-for="exercice of exercise.exercises">
-                        <div
-                            :id="`editor_${exercice.id}`"
-                            class="editor"
-                        >{{ exercice.program != null ? exercice.program : "" }}</div>
+                    <article class="codingArea" v-for="exercice of exercise">
+                        <div :id="`editor_${exercice.id}`" class="editor">{{ exercice.program != null ? exercice.program : "" }}</div>
+
                         <ul :id="`output_${exercice.id}`" class="output">
                             <li>>>></li>
                         </ul>
@@ -38,14 +36,8 @@
                     <section id="footer">
                         <article>
                             <h1>Actions</h1>
-                            <button
-                                v-if="runner != null"
-                                @click="execPython(0)"
-                            >Éxecuter première fenêtre de code</button>
-                            <button
-                                v-if="runner != null"
-                                @click="execPython(1)"
-                            >Éxecuter deuxième fenêtre de code</button>
+                            <button v-if="runner != null" @click="execPython(0)">Éxecuter première fenêtre de code</button>
+                            <button v-if="runner != null" @click="execPython(1)">Éxecuter deuxième fenêtre de code</button>
 
                             <button v-if="canValidate">Soumettre</button>
                             <button v-else disabled>Soumettre</button>
@@ -74,9 +66,11 @@ export default {
                         this.runner = await loadPyodide();
 
                         // On en profite pour set up l'editeur
-                        for (const exercice of this.exercise.exercises) {
+                        for (const exercice of this.exercise) {
                             const editor = new CodeFlask(`#editor_${exercice.id}`, { language: "js", lineNumbers: true });
-                            editor.updateCode(this.decodeHtml(editor.getCode()));
+                            const code = editor.getCode();
+
+                            editor.updateCode(this.decodeHtml(code));
 
                             document.getElementById(`editor_${exercice.id}`).classList.add("active");
                             this.editors.push(editor);
@@ -100,11 +94,15 @@ export default {
     },
 
     async fetch() {
-        const exercise = this.getExerciseFromId();
-        this.exercise = exercise;
+        /* Récupère l'exo */
+        if (this.id != null){
+            const exercise = await this.getSubjectExerciseFromId(this.id);
+            this.exercise = exercise;
+        }
+
     },
 
-    async mounted() {
+    async created() {
         const ID = localStorage.getItem("idSubject");
         localStorage.removeItem("idSubject");
         this.id = ID;
@@ -162,40 +160,16 @@ export default {
             return this.canValidate = this.validate[0] && this.validate[1];
         },
 
-        /* Récupère un exercice depuis l'id de celui-ci */
-        getExerciseFromId(id) {
-            return {
-                "id": 1,
-                "session": 2022,
-                "link": "https://eduscol.education.fr/document/33178/download",
-                "difficulty": 1,
-                "flags": 0,
-                "exercises": [
-                    {
-                        "id": 1,
-                        "type": 0,
-                        "topic": "Algorithmes de Recherche",
-                        "question": "Écrire une fonction `recherche` qui prend en paramètres `caractere`, un caractère, et `mot`, une chaîne de caractères, et qui renvoie le nombre d’occurrences de `caractere` dans `mot`, c’est-à-dire le nombre de fois où `caractere` apparaît dans `mot`.",
-                        "asserts": [
-                            ["recherche('e', \"sciences\")", 2],
-                            ["recherche('i', \"mississippi\")", 4],
-                            ["recherche('a', \"mississippi\")", 0]
-                        ],
-                        "program": null
-                    },
-                    {
-                        "id": 2,
-                        "type": 1,
-                        "topic": "Algorithmes Glouton",
-                        "question": "On s’intéresse à un algorithme récursif qui permet de rendre la monnaie à partir d’une liste donnée de valeurs de pièces et de billets - le système monétaire est donné sous forme d’une liste `pieces=[100, 50, 20, 10, 5, 2, 1]` - (on supposera qu’il n’y a pas de limitation quant à leur nombre), on cherche à donner la liste de pièces à rendre pour une somme donnée en argument.\nCompléter le code Python ci-dessous de la fonction rendu_glouton qui implémente cet algorithme et renvoie la liste des pièces à rendre",
-                        "asserts": [
-                            ["rendu_glouton(68, [], 0)", "[50, 10, 5, 2, 1]"],
-                            ["rendu_glouton(291, [], 0)", "[100, 100, 50, 20, 20, 1]"]
-                        ],
-                        "program": "Pieces = [100,50,20,10,5,2,1]\ndef rendu_glouton(arendre, solution=[], i=0):\n\tif arendre == 0:\n\t\treturn ...\n\tp = Pieces[i],\n\tif p <= ... :\n\t\tsolution.append(...)\n\t\treturn rendu_glouton(arendre - p, solution, i)\n\telse :\n\t\treturn rendu_glouton(arendre, solution, ...)"
-                    }
-                ]
-            }
+        /* Récupère l'exo d'un sujet depuis l'id de celui-ci */
+        getSubjectExerciseFromId(id) {
+            return new Promise(async (res, rej) => {
+				try {
+					const req = await this.$axios.$get(`/api/subjects/id/${id}/exercises`);
+					res(req);
+				} catch(e) { 
+					rej(e);
+				}
+			});
         }
     },
 
