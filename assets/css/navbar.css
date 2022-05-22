@@ -65,7 +65,7 @@
     height: fit-content;
     top: 105px;
     border-radius: 5px;
-    z-index: 51;
+    z-index: 500;
     animation: fadein .1s ease;
 }
 

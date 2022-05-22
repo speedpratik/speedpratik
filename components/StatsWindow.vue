@@ -1,35 +1,27 @@
 <template>
-	<section id="navbar">
-		<ul>
-			<li>
-				<img @click="home" src="icon.svg" draggable="false" loading="lazy" />
-			</li>
-		</ul>
-
-		<ul class="userContent">
-			<li v-if="this.$auth.loggedIn">
-				<span v-if="userDetails">{{ userDetails.username }}</span>
-				<img v-if="userDetails" @click="dropDown = true" :src="userDetails.avatar" alt="Avatar" id="navAvatar" loading="lazy" />
-
-				<ul v-if="dropDown" data-linked="navAvatar" v-click-outside id="dropdown">
-					<li>Profil</li>
-					<li class="hoverRed" @click="logout">Déconnexion</li>
-				</ul>
-			</li>
-			<li v-else>
-				<button @click="login">Connexion</button>
-			</li>
-		</ul>
-	</section>
+    <section id="stats" v-if="date != null && userDetails != null">
+        <article>
+            <span>Compte créé le:</span>
+            <h2>{{ ("0" + date.getDate()).slice(-2) + "/" + ("0" + parseInt(date.getMonth() + 1)).slice(-2) + "/" + date.getFullYear() }}</h2>
+        </article>
+        <article>
+            <span>Exercice(s) complété(s):</span>
+            <h2>{{ userDetails.completed_exercises }}</h2>
+        </article>
+        <article>
+            <span>Temps total accumulé:</span>
+            <h2>{{ userDetails.accumulated_time }}</h2>
+        </article>
+    </section>
 </template>
 
 <script>
 export default {
-	name: "NavbarSP",
+	name: "StatsWindow",
 	data() {
 		return { 
 			userDetails: null,
-			dropDown: false
+            date: null
 		}
 	},
 
@@ -37,6 +29,8 @@ export default {
 		/* Récupère les détails de l'utilisateur */
 		if (this.$auth.loggedIn) {
 			const details = await this.getUserDetails();
+
+            this.date = new Date(details.account_creation);
 			this.userDetails = details;
 		}
 	},
@@ -44,15 +38,6 @@ export default {
 
 	/* Fonctions */
 	methods: {
-		/* Redirige sur la page de connexion */
-		login() { this.$router.push("/login"); },
-		
-		/* Déconnecte l'utilisateur */
-		logout() { this.$auth.logout(); },
-
-		/* Retourne sur la page d'accueil */
-		home() { this.$router.push("/"); },
-
 		/* Récupère les infos utilisateur */
 		getUserDetails() {
 			return new Promise(async (res, rej) => {

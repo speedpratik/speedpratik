@@ -1,0 +1,129 @@
+#ide {
+    display: flex;
+    height: calc(100vh - 100px);
+}
+
+#ide section {
+    display: flex;
+    flex-direction: column;
+}
+
+#ide section#consigne {
+    width: 30%;
+    font-family: 'Jost', sans-serif;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: white;
+    overflow-y: auto;
+}
+#ide section#consigne > ul { padding: 0; margin: 0; list-style-type: none; }
+#ide section#consigne .enonce { 
+    padding: 1vh 2vw;
+    margin-bottom: 3vh; 
+    display: flex; 
+    flex-direction: column; 
+}
+#ide section#consigne .enonce span:last-of-type {margin-top: 2vh;}
+#ide section#consigne .enonce:first {
+    border-bottom: 1px solid black;
+}
+
+#ide section#consigne code {
+    padding: 3px 5px;
+    background-color: rgba(117, 117, 117, 0.2);
+    border-radius: 5px;
+    font-size: 15px;
+}
+
+#ide section#consigne .asserts {
+    list-style-type: none;
+    font-family: 'Inconsolata', monospace;
+    padding: 0 20px;
+}
+
+#ide section#consigne h1 { 
+    font-weight: bold;
+    font-size: 25px;
+    margin-bottom: 0;
+}
+
+
+#ide section#interface {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 70%;
+    font-family: 'Jost', sans-serif;
+    color: white;
+    overflow-y: auto;
+}
+
+#ide .codingArea {
+    display: flex;
+    flex-direction: row;
+    width: 95%;
+    justify-content: space-between;
+    margin-top: 2vh;
+    height: 250px;
+    overflow: hidden;
+}
+
+
+#ide .output {
+    width: 43%;
+    margin: 0;
+    flex-shrink: 2;
+    background-color: var(--main-dark);
+    right: 0;
+    border-radius: 3px;
+    padding: 10px 15px;
+    overflow: auto;
+    list-style-type: none;
+}
+#ide .output .error { color: var(--main-red); }
+
+
+#ide .editor {
+    cursor: default;
+    opacity: 0;
+    width: 20%;
+    min-height: 300px;
+    height: fit-content;
+    max-height: 350px;
+    border-radius: 3px;
+}
+#ide .editor.active {
+    cursor: auto;
+    opacity: 1;
+    animation: fadein .5s ease;
+}
+
+#ide .editor .codeflask {
+    width: 35%;
+    height: 250px;
+    max-height: 350px;
+    border-radius: 3px;
+}
+#ide .editor .codeflask *::selection { background: rgba(0, 0, 0, 0.1); }
+#ide .editor .codeflask * { font-family: 'Inconsolata', monospace; font-size: 15px; }
+
+#ide #footer {
+    display: flex;
+    flex-direction: row;
+    background: rgba(0, 0, 0, .2);
+    width: 100%;
+    flex-grow: 1;
+    margin-top: 3vh;
+}
+#ide #footer article {
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    padding: 0 2vw;
+    overflow: auto;
+}
+#ide #footer article:first-child { width: 28%; }
+#ide #footer article h1 { font-size: larger; margin-bottom: 2vh; margin-top: 2.2vh; }
+#ide #footer article button { margin-bottom: .5vh; animation: fadein .5s ease; transition: background-color .5s ease; }
+#ide #footer article button:hover { transform: translateY(0); opacity: 1; background-color: var(--main-purple-lighter); }
+#ide #footer article button:disabled:hover { opacity: .5; }
