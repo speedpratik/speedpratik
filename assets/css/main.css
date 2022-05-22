@@ -69,6 +69,51 @@ button:active { transform: translateY(0); opacity: 1; }
     text-align: center;
 }
 
+.vm--modal { height: fit-content !important; border-radius: 5px !important; background-color: transparent !important; }
+.modal-content {
+    border-radius: 5px;
+    display: flex;
+    color: white;
+    flex-direction: column;
+    align-items: center;
+    height: 150%;
+    background-color: var(--main-dark-lighter);
+    padding-bottom: 2vh;
+}
+.modal-content h1 {
+    font-size: 2.8pc;
+    text-transform: uppercase;
+    font-style: italic;
+    font-family: 'Koulen', cursive;
+    margin-bottom: 0;
+} 
+.modal-content span { font-family: 'Jost', sans-serif; opacity: .5; }
+.modal-content .countdown {
+    font-size: 2pc;
+    text-transform: uppercase;
+    font-family: 'Koulen', cursive;
+    margin: 1vh 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 0 2pc;
+    border-radius: 5px;
+    margin-bottom: 5vh;
+    opacity: .8;
+}
+.modal-content section {display: flex; width: 100%; align-items: center; justify-content: center;}
+.modal-content section article {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Jost', sans-serif; 
+    width: 30%;
+}
+.modal-content section article svg { font-size: 3pc; }
+.modal-content button {
+    width: 50%;
+    margin: 3vh 0;
+}
+
+
 #stats {
     user-select: none;
     display: flex;
