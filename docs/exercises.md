@@ -91,7 +91,7 @@ Returns the first 100 retrieved exercises objects of given type from the databas
 ### Create exercise
 #### `POST /exercises`
 
-Creates new subject with the all [Exercise Structure](/exercises?id=exercise-structure) fields except for ID. Returns newly created exercise.
+Creates new subject with all [Exercise Structure](/exercises?id=exercise-structure) fields except for ID. Returns newly created exercise.
 
 ### Modify exercise
 #### `PUT /exercises/id/{exercise.id}`

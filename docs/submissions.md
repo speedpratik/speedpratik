@@ -12,7 +12,7 @@ Represents users attempts at solving subjects.
 | `user`        | int   | the submission's linked user ID                                                 |
 | `subject`     | int   | the submission's linked subject ID if applicable                                |
 | `exercise`    | int   | the submission's linked exercise ID if applicable                               |
-| `number`      | int   | the submission's number for the subject / exercise                              |
+| `number`      | int   | the submission's number for the subject / exercise by the user                  |
 | `start_date`  | int   | the submission's starting date as a timestamp                                   |
 | `submit_date` | int   | the submission's submit date as a timestamp                                     |
 | `xp_award`    | int   | the submission's XP award                                                       |
@@ -79,7 +79,7 @@ Array containing all exercises programs submitted by the user.
 
 ## API Endpoints
 
-**Note:** Due to their nature, it is not possible to modify a created submission object.
+**Note:** Due to their nature, it is **not** possible to modify a created submission object.
 
 ### Get Submissions
 
@@ -111,7 +111,19 @@ Fetches all submissions objects of given exercise ID.
 
 #### `POST /submissions`
 
-Creates new submission with the all [Submissions Structure](/submissions?id=submissions-structure) fields except for ID. Returns newly created submission object.
+Creates new submission with the below-described [Submissions Structure](/submissions?id=submissions-structure) fields. Returns newly created submission object.
+
+| Value        | Type  | Description                                                                     |
+|--------------|-------|---------------------------------------------------------------------------------|
+| `user`       | int   | the submission’s linked user ID                                                 |
+| `subject`    | int   | the submission’s linked subject ID if applicable                                |
+| `exercise`   | int   | the submission’s linked exercise ID if applicable                               |
+| `start_date` | int   | the submission’s starting date as a timestamp                                   |
+| `programs`   | array | the submission's [programs as an array](/submissions?id=programs-sub-structure) |
+
+**Note:** As specified above, there **must** be either a `subject` or an `exercise` but not both!
+
+The awarded XP, submit date and submission number is determined by the API backend.
 
 ### Delete Submission
 
