@@ -122,6 +122,8 @@
     padding: 0 2vw;
     overflow: auto;
 }
+#ide #footer article div button { width: 100% }
+
 #ide #footer article:first-child { width: 28%; }
 #ide #footer article h1 { font-size: larger; margin-bottom: 2vh; margin-top: 2.2vh; }
 #ide #footer article button { margin-bottom: .5vh; animation: fadein .5s ease; transition: background-color .5s ease; }

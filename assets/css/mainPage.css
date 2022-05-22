@@ -106,7 +106,7 @@
 
 
 
-@media screen and (max-width: 1440px) {
+@media screen and (max-width: 1240px) {
     #content article.left {
         width: 100%;
         flex-direction: column;

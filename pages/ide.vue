@@ -39,8 +39,10 @@
                             <button v-if="runner != null" @click="execPython(0)">Éxecuter première fenêtre de code</button>
                             <button v-if="runner != null" @click="execPython(1)">Éxecuter deuxième fenêtre de code</button>
 
-                            <button v-if="canValidate">Soumettre</button>
-                            <button v-else disabled>Soumettre</button>
+                            <div v-if="runner != null">
+                                <button v-if="canValidate">Soumettre</button>
+                                <button v-else disabled>Soumettre</button>
+                            </div>
                         </article>
                     </section>
                 </section>
@@ -88,7 +90,7 @@ export default {
             exercise: null,
             runner: null,
             editors: [],
-            validate: [false, true],
+            validate: [false, false],
             canValidate: false
         }
     },
