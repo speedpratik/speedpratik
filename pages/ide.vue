@@ -1,9 +1,11 @@
 <template>
     <main>
         <!-- Navbar -->
-		<NavbarSP />
+        <NavbarSP />
 
         <section v-if="id != null">
+            <canvas id="confettis"></canvas>
+
             <article id="ide">
                 <section id="consigne">
                     <span
@@ -26,7 +28,10 @@
 
                 <section id="interface">
                     <article class="codingArea" v-for="exercice of exercise">
-                        <div :id="`editor_${exercice.id}`" class="editor">{{ exercice.program != null ? exercice.program : "" }}</div>
+                        <div
+                            :id="`editor_${exercice.id}`"
+                            class="editor"
+                        >{{ exercice.program != null ? exercice.program : "" }}</div>
 
                         <ul :id="`output_${exercice.id}`" class="output">
                             <li>>>></li>
@@ -36,11 +41,17 @@
                     <section id="footer">
                         <article>
                             <h1>Actions</h1>
-                            <button v-if="runner != null" @click="execPython(0)">Éxecuter première fenêtre de code</button>
-                            <button v-if="runner != null" @click="execPython(1)">Éxecuter deuxième fenêtre de code</button>
+                            <button
+                                v-if="runner != null"
+                                @click="execPython(0)"
+                            >Éxecuter première fenêtre de code</button>
+                            <button
+                                v-if="runner != null"
+                                @click="execPython(1)"
+                            >Éxecuter deuxième fenêtre de code</button>
 
                             <div v-if="runner != null">
-                                <button v-if="canValidate">Soumettre</button>
+                                <button v-if="canValidate" @click="validation">Soumettre</button>
                                 <button v-else disabled>Soumettre</button>
                             </div>
                         </article>
@@ -55,6 +66,7 @@
 <script>
 import NavbarSP from "~/components/NavbarSP.vue"
 import CodeFlask from "codeflask"
+import Confettis from "canvas-confetti"
 
 
 export default {
@@ -90,33 +102,37 @@ export default {
             exercise: null,
             runner: null,
             editors: [],
-            validate: [false, false],
+            validate: [true, true],
             canValidate: false
         }
     },
 
     async fetch() {
         /* Récupère l'exo */
-        if (this.id != null){
+        if (this.id != null) {
             const exercise = await this.getSubjectExerciseFromId(this.id);
             this.exercise = exercise;
-        }
 
+            // Exo introuvable dans la bdd
+            if (this.exercise.length == 0) this.$router.push("/");
+        }
     },
 
     async created() {
-        const ID = localStorage.getItem("idSubject");
-        localStorage.removeItem("idSubject");
-        this.id = ID;
+        if (process.client) {
+            const ID = window.localStorage.getItem("idSubject");
+            window.localStorage.removeItem("idSubject");
+            this.id = ID;
 
-        /* Empêche les utilisateurs d'avoir accès à la page sans ID */
-        if (ID == null) this.$router.push("/");
+            /* Empêche les utilisateurs d'avoir accès à la page sans ID */
+            if (ID == null) this.$router.push("/");
 
-        /* Ajoute log a la fenêtre */
-        window.pythonLog = this.log;
+            /* Ajoute log a la fenêtre */
+            window.pythonLog = this.log;
 
-        /* Initialise la variable CanValidate */
-        this.canValidate = this.validate[0] && this.validate[1];
+            /* Initialise la variable CanValidate */
+            this.canValidate = this.validate[0] && this.validate[1];
+        }
     },
 
 
@@ -145,7 +161,7 @@ export default {
             const _code = this.editors[editorIndex].getCode();
             let codeToExec = `import js\ndef print(content):\tjs.pythonLog("none", repr(content), ${editorIndex + 1}, False)\n${_code}\n`
 
-            const asserts = this.exercise.exercises.filter(ex => ex.id == editorIndex + 1)[0].asserts;
+            const asserts = this.exercise.filter(ex => ex.id == editorIndex + 1)[0].asserts;
             asserts.map(assert => { codeToExec += `assert ${assert[0]} == ${assert[1]}, "Ton programme ne passe pas les asserts!"\n`; })
             codeToExec += `print("Succès!")`;
 
@@ -165,13 +181,48 @@ export default {
         /* Récupère l'exo d'un sujet depuis l'id de celui-ci */
         getSubjectExerciseFromId(id) {
             return new Promise(async (res, rej) => {
-				try {
-					const req = await this.$axios.$get(`/api/subjects/id/${id}/exercises`);
-					res(req);
-				} catch(e) { 
-					rej(e);
-				}
-			});
+                try {
+                    const req = await this.$axios.$get(`/api/subjects/id/${id}/exercises`);
+                    res(req);
+                } catch (e) {
+                    rej(e);
+                }
+            });
+        },
+
+
+        /* Valide l'exercice */
+        validation() {
+            const canvas = document.getElementById("confettis");
+            canvas.style.display = "block";
+
+            const duration = 3000;
+            const end = Date.now() + duration;
+
+            const confettis = Confettis.create(canvas, {
+                resize: true,
+                useWorker: true
+            });
+
+            (function frame() {
+                confettis({
+                    particleCount: 7,
+                    angle: 0,
+                    spread: 255,
+                    origin: { x: 0, y: 0.5 }
+                });
+
+                confettis({
+                    particleCount: 7,
+                    angle: 180,
+                    spread: 255,
+                    origin: { x: 1, y: 0.5 }
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
         }
     },
 
