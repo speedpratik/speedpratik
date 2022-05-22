@@ -8,7 +8,7 @@ Main page (WIP)
 ![image](https://user-images.githubusercontent.com/29103374/169398514-f61da780-f902-4228-b7d8-cc2ad56767b7.png)
 
 IDE (WIP)
-![image](https://user-images.githubusercontent.com/29103374/169667559-59d5e1dc-c3ff-4e4e-a306-11df82c4d163.png)
+![image](https://user-images.githubusercontent.com/29103374/169694112-5692e358-e538-4ba9-bfca-8a621a9aa00f.png)
 
 
 ## Build Setup
