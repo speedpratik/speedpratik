@@ -1,6 +1,8 @@
-# SeedPratik API
+# SpeedPratik API
 
-**Development edition note: This API may change at any time, do not use right now.**
+Welcome to SpeedPratik's API documentation.
+
+All API endpoints begins by `/api`. A live URI example would be `https://speedpratik.fr/api/users/23`.
 
 ## Development notes
 

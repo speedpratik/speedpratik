@@ -49,6 +49,8 @@ The difficulty is merely an estimation and may be subjective. User feedback shou
 | `1 << 1` | HEBDO  | Weekly selected subject                                        |
 | `1 << 2` | DAILY  | Daily selected subject                                         |
 
+## API Endpoints
+
 ### Get subject
 #### `GET /subjects`
 
@@ -69,7 +71,7 @@ Returns all subject object of [given difficulty](/subjects?id=subject-difficulty
 ### Create subject
 #### `POST /subjects`
 
-Creates new subject with the all [subject structure](/subjects?id=subject-structure) fields except for ID. Returns modified subject.
+Creates new subject with the all [subject structure](/subjects?id=subject-structure) fields except for ID. Returns newly created subject.
 
 ### Modify subject
 #### `PUT /subjects/id/{subject.id}`
