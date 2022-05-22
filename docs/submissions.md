@@ -83,29 +83,29 @@ Array containing all exercises programs submitted by the user.
 
 ### Get Submissions
 
-#### `GET /user/{user.id}/submissions`
+#### `GET /users/{user.id}/submissions`
 
 Fetches all submissions objects from user of given ID.
 
-#### `GET /user/{user.id}/submissions/subject/{subject.id}`
+#### `GET /users/{user.id}/submissions/subject/{subject.id}`
 
 Fetches all submissions objects from user of given ID on a given subject.
 
-#### `GET /user/{user.id}/submissions/exercise/{exercise.id}`
+#### `GET /users/{user.id}/submissions/exercise/{exercise.id}`
 
 Fetches all submissions objects from user of given ID on a given exercise.
+
+#### `GET /subject/{subject.id}/submissions`
+
+Fetches all submissions objects of given subject ID.
+
+#### `GET /exercise/{exercise.id}/submissions`
+
+Fetches all submissions objects of given exercise ID.
 
 #### `GET /submissions/id/{submission.id}`
 
 Fetches submission object of given ID.
-
-#### `GET /submissions/subject/{subject.id}`
-
-Fetches all submissions objects of given subject ID.
-
-#### `GET /submissions/exercise/{exercise.id}`
-
-Fetches all submissions objects of given exercise ID.
 
 ### Create Submission
 
