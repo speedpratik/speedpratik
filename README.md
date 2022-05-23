@@ -4,11 +4,13 @@
 Login page
 ![Login page](https://user-images.githubusercontent.com/29103374/169101863-439cb55d-155c-41d2-93d8-b1c6431c5fb7.png)
 
-Main page (WIP)
+Main page
 ![image](https://user-images.githubusercontent.com/29103374/169398514-f61da780-f902-4228-b7d8-cc2ad56767b7.png)
 
-IDE (WIP)
-![image](https://user-images.githubusercontent.com/29103374/169694112-5692e358-e538-4ba9-bfca-8a621a9aa00f.png)
+IDE
+![image](https://user-images.githubusercontent.com/29103374/169910697-33ee9964-222e-4827-a23d-7938a919dd45.png)
+![image](https://user-images.githubusercontent.com/29103374/169910722-a6e8c357-6b0f-4781-b317-02f5a5ae4f7d.png)
+
 
 
 ## Build Setup
