@@ -17,6 +17,7 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 require('./users')(app, db)
 require('./subjects')(app, db)
 require('./exercises')(app, db)
+require('./submissions')(app, db)
 
 // Allow for 404 errors
 app.use((req, res) => {
