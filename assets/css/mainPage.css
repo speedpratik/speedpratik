@@ -39,8 +39,8 @@
     flex-direction: column;
     width: 22vw;
     height: 22vw;
-    background-image: linear-gradient(142deg, rgba(0, 0, 0, .7) 0%, rgba(0, 0, 0, .7) 100%), 
-                      linear-gradient(142deg, rgba(41, 35, 48, .5) 0%, rgba(227, 55, 55, .5) 100%), 
+    background-image: linear-gradient(142deg, rgba(0, 0, 0, .7) 0%, rgba(0, 0, 0, .7) 100%),
+                      linear-gradient(142deg, rgba(41, 35, 48, .5) 0%, rgba(227, 55, 55, .5) 100%),
                       url(/prog.jpg);
     box-shadow: 0px 0px 35px -1px rgba(0, 0, 0, .45);
     border-radius: 15px;
@@ -49,8 +49,8 @@
     align-items: center;
     justify-content: center;
 }
-#content .left .daily h2 { 
-    opacity: 1 !important; 
+#content .left .daily h2 {
+    opacity: 1 !important;
     margin-top: 0;
     width: 150px;
     text-align: center;
@@ -91,12 +91,12 @@
 }
 #content .right .modes:first-child { margin-top: 5vh; }
 
-#content .right .modes span { 
-    width: 60%; 
+#content .right .modes span {
+    width: 60%;
     opacity: .5;
 
 }
-#content .right .modes h1 { 
+#content .right .modes h1 {
     width: 200px;
     font-size: 1.8pc;
     text-transform: uppercase;
@@ -106,7 +106,7 @@
 
 
 
-@media screen and (max-width: 1440px) {
+@media screen and (max-width: 1220px) {
     #content article.left {
         width: 100%;
         flex-direction: column;
