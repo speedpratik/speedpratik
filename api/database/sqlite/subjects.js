@@ -1,4 +1,4 @@
-module.exports = (db, exercises) => {
+module.exports = (db) => {
   const module = {}
 
   module.initialize = () => {
@@ -59,32 +59,17 @@ module.exports = (db, exercises) => {
     })
   }
 
-  module.getBySessionAndNumber = (session, number) => {
+  module.create = (subject) => {
     return new Promise((resolve, reject) => {
-      db.get('SELECT * FROM subjects WHERE session=? AND number=?', [session, number], (err, row) => {
-        if (err) {
-          return reject(err)
-        }
-        if (row === undefined) {
-          return resolve(null)
-        }
-        resolve(row)
-      })
+      db.run('INSERT INTO subjects(session, number, link, difficulty, flags) VALUES (?, ?, ?, ?, ?)',
+        [subject.session, subject.number, subject.link, subject.difficulty, subject.flags],
+        async function (err) {
+          if (err) {
+            return reject(err)
+          }
+          resolve(await module.getByID(this.lastID))
+        })
     })
-  }
-
-  module.create = async (subject) => {
-    const dbSubject = await module.getBySessionAndNumber(subject.session, subject.number)
-
-    // Prevents the creation of duplicated subjects
-    if (dbSubject) {
-      return dbSubject
-    }
-
-    db.run('INSERT INTO subjects(session, number, link, difficulty, flags) VALUES (?, ?, ?, ?, ?)',
-      [subject.session, subject.number, subject.link, subject.difficulty, subject.flags])
-
-    return await module.getBySessionAndNumber(subject.session, subject.number) // Returns the newly created subject object
   }
 
   module.modify = async (subject) => {
