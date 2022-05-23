@@ -144,8 +144,12 @@ export default {
     },
 
     async fetch() {
+
+        /* Submit */
+        if ((this.validate[0] && this.validate[1]) && this.tempsMit != null) this.submissionAPI();
+
         /* Récupère l'exo */
-        if (this.id != null) {
+        if (this.id != null && this.tempsMit == null) {
             const exercise = await this.getSubjectExerciseFromId(this.id);
             this.exercise = exercise;
 
@@ -153,6 +157,7 @@ export default {
             if (this.exercise.length == 0) this.$router.push("/");
         }
     },
+    fetchOnServer: true,
 
     async created() {
         if (process.client) {
@@ -253,7 +258,8 @@ export default {
             this.tempsMit = this.differenceDate();
             this.canValidate = false;
 
-            this.submissionAPI();
+            // "Contournement" du problème, on rappelle la fonction fetch
+            this.$fetch();
 
             const duration = 2000;
             const end = Date.now() + duration;
