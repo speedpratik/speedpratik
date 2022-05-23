@@ -94,10 +94,11 @@ button:active { transform: translateY(0); opacity: 1; }
     font-family: 'Koulen', cursive;
     margin: 1vh 0;
     background-color: rgba(0, 0, 0, 0.3);
-    padding: 0 2pc;
     border-radius: 5px;
     margin-bottom: 5vh;
     opacity: .8;
+    width: 150px;
+    text-align: center;
 }
 .modal-content section {display: flex; width: 100%; align-items: center; justify-content: center;}
 .modal-content section article {
@@ -110,7 +111,7 @@ button:active { transform: translateY(0); opacity: 1; }
 .modal-content section article svg { font-size: 3pc; }
 .modal-content button {
     width: 50%;
-    margin: 3vh 0;
+    margin-bottom: 3vh;
 }
 
 

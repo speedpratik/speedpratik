@@ -18,15 +18,15 @@
                             <span>Temps écoulé:</span>
                             <span class="countdown">{{ tempsMit.string }}</span>
                         </article>
-                        <!-- <article>
-                            <span>{{ errorsCount }} erreur(s).</span>
-                            <i class="fa-solid fa-circle-exclamation"></i>
+                        <article>
+                            <span>Erreur(s) python</span>
+                            <span class="countdown">{{ errorsCount }}</span>
                         </article>
 
                         <article v-if="this.$auth.loggedIn">
-                            <span>+ {{ Math.floor(300 * Math.exp(-2 * tempsMit.time)) }}xp.</span>
-                            <i class="fa-solid fa-flask"></i>
-                        </article> -->
+                            <span>XP récolté</span>
+                            <span class="countdown">{{ xp_award }}</span>
+                        </article>
                     </section>
 
                     <button @click="$router.push('/')">Retour</button>
@@ -133,23 +133,20 @@ export default {
             exercise: null,
             runner: null,
             editors: [],
-            validate: [true, true],
+            validate: [false, false],
             canValidate: false,
 
             // Statistiques
             startedExercise: null,
             errorsCount: 0,
-            tempsMit: null
+            tempsMit: null,
+            xp_award: null
         }
     },
 
     async fetch() {
-
-        /* Submit */
-        if ((this.validate[0] && this.validate[1]) && this.tempsMit != null) this.submissionAPI();
-
         /* Récupère l'exo */
-        if (this.id != null && this.tempsMit == null) {
+        if (this.id != null) {
             const exercise = await this.getSubjectExerciseFromId(this.id);
             this.exercise = exercise;
 
@@ -249,7 +246,7 @@ export default {
         },
 
         /* Valide l'exercice */
-        validation() {
+        async validation() {
             const canvas = document.getElementById("confettis");
             canvas.style.display = "block";
 
@@ -258,9 +255,13 @@ export default {
             this.tempsMit = this.differenceDate();
             this.canValidate = false;
 
-            // "Contournement" du problème, on rappelle la fonction fetch
-            this.$fetch();
+            // Submit l'exercice (Seulement si il est co)
+            if (this.$auth.loggedIn) {
+                const { xp_award } = await this.submissionAPI();
+                this.xp_award = Math.floor(xp_award);
+            }
 
+            // Confettis pendant 2s
             const duration = 2000;
             const end = Date.now() + duration;
 
