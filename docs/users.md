@@ -49,6 +49,7 @@ Represents the accessible user specifications.
 |----------|-------|-------------------------|
 | `1 << 0` | ADMIN | Website's administrator |
 
+## API Endpoints
 
 ### Get user
 #### `GET /users/{user.id}`

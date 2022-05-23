@@ -56,10 +56,16 @@ module.exports = (db) => {
       return dbUser
     }
 
-    db.run('INSERT INTO users(username, email, oauth2, avatar, account_creation) VALUES (?, ?, ?, ?, ?)',
-      [user.username, user.email, user.oauth2, user.avatar, Date.now()])
-
-    return await module.getByEmail(user.email) // Returns the newly created user object
+    return new Promise((resolve, reject) => {
+      db.run('INSERT INTO users(username, email, oauth2, avatar, account_creation) VALUES (?, ?, ?, ?, ?)',
+        [user.username, user.email, user.oauth2, user.avatar, Date.now()],
+        async function (err) {
+          if (err) {
+            reject(err)
+          }
+          resolve(await module.get(this.lastID))
+        })
+    })
   }
 
   module.modify = async (user) => {

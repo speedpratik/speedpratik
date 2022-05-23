@@ -85,33 +85,17 @@ module.exports = (db) => {
     })
   }
 
-  module.getByQuestionAndTopic = (question, topic) => {
+  module.create = (exercise) => {
     return new Promise((resolve, reject) => {
-      db.get('SELECT * FROM exercises WHERE question=? AND topic=?', [question, topic], (err, row) => {
-        if (err) {
-          return reject(err)
-        }
-        if (row === undefined) {
-          return resolve(null)
-        }
-        row.asserts = JSON.parse(row.asserts || '[]')
-        resolve(row)
-      })
+      db.run('INSERT INTO exercises(type, subject, number, topic, question, asserts, program) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [exercise.type, exercise.subject, exercise.number, exercise.topic, exercise.question, exercise.asserts, exercise.program],
+        async function (err) {
+          if (err) {
+            reject(err)
+          }
+          resolve(await module.getByID(this.lastID))
+        })
     })
-  }
-
-  module.create = async (exercise) => {
-    const dbExercise = await module.getByQuestionAndTopic(exercise.question, exercise.topic)
-
-    // Prevents the creation of duplicated exercises
-    if (dbExercise) {
-      return dbExercise
-    }
-
-    db.run('INSERT INTO exercises(type, subject, number, topic, question, asserts, program) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [exercise.type, exercise.subject, exercise.number, exercise.topic, exercise.question, exercise.asserts, exercise.program])
-
-    return await module.getByQuestionAndTopic(exercise.question, exercise.topic) // Returns the newly created exercise object
   }
 
   module.modify = async (exercise) => {
