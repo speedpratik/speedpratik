@@ -95,11 +95,11 @@ Fetches all submissions objects from user of given ID on a given subject.
 
 Fetches all submissions objects from user of given ID on a given exercise.
 
-#### `GET /subject/{subject.id}/submissions`
+#### `GET /subjects/{subject.id}/submissions`
 
 Fetches all submissions objects of given subject ID.
 
-#### `GET /exercise/{exercise.id}/submissions`
+#### `GET /exercises/{exercise.id}/submissions`
 
 Fetches all submissions objects of given exercise ID.
 
