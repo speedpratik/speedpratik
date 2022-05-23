@@ -103,6 +103,10 @@
     max-height: 350px;
     border-radius: 3px;
 }
+
+#ide .editor .codeflask_textarea { width: 100% !important; }
+#ide .editor .codeflask__pre { width: auto !important; }
+#ide .editor .codeflask__lines { background: #f1f1f1; z-index: 3; }
 #ide .editor .codeflask *::selection { background: rgba(0, 0, 0, 0.1); }
 #ide .editor .codeflask * { font-family: 'Inconsolata', monospace; font-size: 15px; }
 
