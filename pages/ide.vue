@@ -107,6 +107,9 @@ export default {
                     src: "https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js", callback: async () => {
                         this.runner = await loadPyodide();
 
+                        // On démarre le timer
+                        this.startedExercise = new Date();
+
                         // On en profite pour set up l'editeur
                         for (const exercice of this.exercise) {
                             const editor = new CodeFlask(`#editor_${exercice.id}`, { language: "js", lineNumbers: true });
@@ -134,7 +137,7 @@ export default {
             canValidate: false,
 
             // Statistiques
-            startedExercise: new Date(),
+            startedExercise: null,
             errorsCount: 0,
             tempsMit: null
         }
