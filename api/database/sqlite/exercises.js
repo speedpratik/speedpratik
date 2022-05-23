@@ -20,6 +20,9 @@ module.exports = (db) => {
         if (err) {
           return reject(err)
         }
+        rows.forEach((row) => {
+          row.asserts = JSON.parse(row.asserts || '[]')
+        })
         resolve(rows)
       })
     })
@@ -31,6 +34,9 @@ module.exports = (db) => {
         if (err) {
           return reject(err)
         }
+        rows.forEach((row) => {
+          row.asserts = JSON.parse(row.asserts || '[]')
+        })
         resolve(rows)
       })
     })
@@ -42,6 +48,9 @@ module.exports = (db) => {
         if (err) {
           return reject(err)
         }
+        rows.forEach((row) => {
+          row.asserts = JSON.parse(row.asserts || '[]')
+        })
         resolve(rows)
       })
     })
@@ -56,6 +65,7 @@ module.exports = (db) => {
         if (row === undefined) {
           return resolve(null)
         }
+        row.asserts = JSON.parse(row.asserts || '[]')
         resolve(row)
       })
     })
@@ -67,6 +77,9 @@ module.exports = (db) => {
         if (err) {
           return reject(err)
         }
+        rows.forEach((row) => {
+          row.asserts = JSON.parse(row.asserts || '[]')
+        })
         resolve(rows)
       })
     })
@@ -81,6 +94,7 @@ module.exports = (db) => {
         if (row === undefined) {
           return resolve(null)
         }
+        row.asserts = JSON.parse(row.asserts || '[]')
         resolve(row)
       })
     })

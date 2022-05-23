@@ -122,8 +122,20 @@
     padding: 0 2vw;
     overflow: auto;
 }
+#ide #footer article div button { width: 100% }
+
 #ide #footer article:first-child { width: 28%; }
 #ide #footer article h1 { font-size: larger; margin-bottom: 2vh; margin-top: 2.2vh; }
 #ide #footer article button { margin-bottom: .5vh; animation: fadein .5s ease; transition: background-color .5s ease; }
 #ide #footer article button:hover { transform: translateY(0); opacity: 1; background-color: var(--main-purple-lighter); }
 #ide #footer article button:disabled:hover { opacity: .5; }
+
+#confettis {
+    position: absolute;
+    top: 100px; left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    display: none;
+    cursor: not-allowed;
+}
