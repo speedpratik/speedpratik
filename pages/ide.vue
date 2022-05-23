@@ -3,6 +3,11 @@
         <!-- Navbar -->
         <NavbarSP />
 
+        <section v-if="runner == null && id != null" id="loading">
+            <h1>Chargement de python, ca arrive!</h1>
+            <span>Le chargement peut prendre plus ou moins longtemps en fonction de votre connexion.</span>
+        </section>
+
         <section v-if="id != null">
             <modal name="submit-modal">
                 <div class="modal-content" v-if="tempsMit != null">
@@ -102,6 +107,9 @@ export default {
                     src: "https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js", callback: async () => {
                         this.runner = await loadPyodide();
 
+                        // On démarre le timer
+                        this.startedExercise = new Date();
+
                         // On en profite pour set up l'editeur
                         for (const exercice of this.exercise) {
                             const editor = new CodeFlask(`#editor_${exercice.id}`, { language: "js", lineNumbers: true });
@@ -129,7 +137,7 @@ export default {
             canValidate: false,
 
             // Statistiques
-            startedExercise: new Date(),
+            startedExercise: null,
             errorsCount: 0,
             tempsMit: null
         }

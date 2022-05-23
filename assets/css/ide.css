@@ -1,3 +1,28 @@
+/* Ecran de chargement */
+#loading {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 100px; left: 0;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: var(--main-dark-lighter);
+    color: white;
+    user-select: none;
+    animation: fadein .5s ease;
+}
+#loading h1 {
+    font-style: italic;
+    font-family: 'Koulen', cursive;
+    font-size: 2.4pc;
+    animation: loading 3s ease infinite;
+}
+#loading span { font-family: 'Jost', sans-serif; opacity: 0.5; }
+
+
+/* IDE */
 #ide {
     display: flex;
     height: calc(100vh - 100px);
@@ -46,7 +71,6 @@
     margin-bottom: 0;
 }
 
-
 #ide section#interface {
     display: flex;
     flex-direction: column;
@@ -58,6 +82,8 @@
     overflow-y: auto;
 }
 
+
+/* Pour les textareas de code */
 #ide .codingArea {
     display: flex;
     flex-direction: row;
@@ -67,7 +93,6 @@
     height: 250px;
     overflow: hidden;
 }
-
 
 #ide .output {
     width: 43%;
@@ -82,31 +107,35 @@
 }
 #ide .output .error { color: var(--main-red); }
 
-
 #ide .editor {
+    flex-shrink: 1;
     cursor: default;
     opacity: 0;
-    width: 20%;
-    min-height: 300px;
-    height: fit-content;
-    max-height: 350px;
+    width: 52%;
     border-radius: 3px;
 }
 #ide .editor.active {
+    position: relative;
     cursor: auto;
     opacity: 1;
     animation: fadein .5s ease;
 }
 
 #ide .editor .codeflask {
-    width: 35%;
-    height: 250px;
+    width: 100%;
+    height: 100%;
     max-height: 350px;
     border-radius: 3px;
 }
+
+#ide .editor .codeflask_textarea { width: 100% !important; }
+#ide .editor .codeflask__pre { width: auto !important; }
+#ide .editor .codeflask__lines { background: #f1f1f1; z-index: 3; }
 #ide .editor .codeflask *::selection { background: rgba(0, 0, 0, 0.1); }
 #ide .editor .codeflask * { font-family: 'Inconsolata', monospace; font-size: 15px; }
 
+
+/* Footer */
 #ide #footer {
     display: flex;
     flex-direction: row;
@@ -124,12 +153,14 @@
 }
 #ide #footer article div button { width: 100% }
 
-#ide #footer article:first-child { width: 28%; }
+#ide #footer article:first-child { width: 50%; padding-bottom: 1vh; }
 #ide #footer article h1 { font-size: larger; margin-bottom: 2vh; margin-top: 2.2vh; }
-#ide #footer article button { margin-bottom: .5vh; animation: fadein .5s ease; transition: background-color .5s ease; }
+#ide #footer article button { width: 70% !important; font-size: .9vw; margin-bottom: .5vh; animation: fadein .5s ease; transition: background-color .5s ease; }
 #ide #footer article button:hover { transform: translateY(0); opacity: 1; background-color: var(--main-purple-lighter); }
 #ide #footer article button:disabled:hover { opacity: .5; }
 
+
+/* 🎉 */
 #confettis {
     position: absolute;
     top: 100px; left: 0;
@@ -138,4 +169,12 @@
     z-index: 100;
     display: none;
     cursor: not-allowed;
+}
+
+
+/* Animations */
+@keyframes loading {
+    0% { opacity: .5; }
+    50% { opacity: 1; }
+    100% { opacity: .5; }
 }
