@@ -114,7 +114,7 @@ module.exports = (db) => {
           if (err) {
             return reject(err)
           }
-          resolve(await module.get(this.lastID))
+          resolve(await module.getByID(this.lastID))
         })
     })
   }

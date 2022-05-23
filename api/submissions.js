@@ -53,8 +53,6 @@ module.exports = (app, db) => {
     const submitDate = Date.now()
     const xpAward = 300 * Math.exp(((-2 * (submitDate - submission.start_date) / 60) / 60) / 1000)
 
-
-
     res.setHeader('Content-Type', 'application/json')
     res.end(JSON.stringify(await db.submissions.create({
       ...submission,
