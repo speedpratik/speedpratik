@@ -108,7 +108,7 @@ export default {
                         this.runner = await loadPyodide();
 
                         // On démarre le timer
-                        this.startedExercise = new Date();
+                        this.startedExercise = Date.now();
 
                         // On en profite pour set up l'editeur
                         for (const exercice of this.exercise) {
@@ -144,8 +144,12 @@ export default {
     },
 
     async fetch() {
+
+        /* Submit */
+        if ((this.validate[0] && this.validate[1]) && this.tempsMit != null) this.submissionAPI();
+
         /* Récupère l'exo */
-        if (this.id != null) {
+        if (this.id != null && this.tempsMit == null) {
             const exercise = await this.getSubjectExerciseFromId(this.id);
             this.exercise = exercise;
 
@@ -153,6 +157,7 @@ export default {
             if (this.exercise.length == 0) this.$router.push("/");
         }
     },
+    fetchOnServer: true,
 
     async created() {
         if (process.client) {
@@ -253,7 +258,8 @@ export default {
             this.tempsMit = this.differenceDate();
             this.canValidate = false;
 
-            console.log(this.tempsMit);
+            // "Contournement" du problème, on rappelle la fonction fetch
+            this.$fetch();
 
             const duration = 2000;
             const end = Date.now() + duration;
@@ -281,7 +287,63 @@ export default {
 
                 if (Date.now() < end) requestAnimationFrame(frame);
             }());
+        },
 
+        /* Récupère les infos utilisateur */
+		getUserDetails() {
+			return new Promise(async (res, rej) => {
+				const strategy = this.$auth.$state.strategy;
+				const infos = {
+					username: null,
+					avatarLink: null,
+					email: null,
+					oauth: strategy
+				}
+
+				switch (strategy) {
+					case "discord":
+						const { username, id, avatar, email } = this.$auth.user;
+						infos.username = username;
+						infos.avatarLink = `https://cdn.discordapp.com/avatars/${id}/${avatar}.png?size=128`;
+						infos.email = email
+						break;
+				}
+
+
+				try {
+					const req = await this.$axios.$post("/api/users", {
+						username: infos.username,
+						email: infos.email,
+						oauth2: infos.oauth,
+						avatar: infos.avatarLink
+					});
+					res(req);
+				} catch(e) { 
+					this.$auth.loginWith(strategy); // Reconnection, erreur
+				}
+			});
+		},
+
+        /* API submission */
+        submissionAPI(){
+            return new Promise(async (res, rej) => {
+                try {
+                    const userDetails = await this.getUserDetails();
+
+                    const req = await this.$axios.$post("/api/submissions", {
+                        user: userDetails.id,
+                        subject: parseInt(this.id),
+                        start_date: this.startedExercise,
+                        programs: [
+                            this.editors[0].getCode(),
+                            this.editors[1].getCode()
+                        ]
+                    });
+                    res(req);
+                } catch (e) {
+                    rej(e);
+                }
+            });
         }
     },
 
