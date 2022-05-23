@@ -100,8 +100,8 @@
 
 #ide .editor .codeflask {
     width: 35%;
-    height: 250px;
-    max-height: 350px;
+    height: 25%;
+    max-height: 25%;
     border-radius: 3px;
 }
 #ide .editor .codeflask *::selection { background: rgba(0, 0, 0, 0.1); }
@@ -122,7 +122,7 @@
     padding: 0 2vw;
     overflow: auto;
 }
-#ide #footer article:first-child { width: 28%; }
+#ide #footer article:first-child { width: 33%; padding-bottom: 2vh; }
 #ide #footer article h1 { font-size: larger; margin-bottom: 2vh; margin-top: 2.2vh; }
 #ide #footer article button { margin-bottom: .5vh; animation: fadein .5s ease; transition: background-color .5s ease; }
 #ide #footer article button:hover { transform: translateY(0); opacity: 1; background-color: var(--main-purple-lighter); }
