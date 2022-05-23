@@ -7,7 +7,7 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
+    "lint:js": "eslint --ext \".js,.vue\" .",
     "lint": "npm run lint:js",
     "lintfix": "npm run lint:js -- --fix"
   },
@@ -15,14 +15,12 @@
     "@nuxtjs/auth-next": "^5.0.0-1648802546.c9880dc",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/markdownit": "^2.0.0",
-    "canvas-confetti": "^1.5.1",
     "codeflask": "^1.4.1",
     "core-js": "^3.19.3",
     "express": "^4.18.1",
     "nuxt": "^2.15.8",
     "sqlite3": "^5.0.8",
     "vue": "^2.6.14",
-    "vue-js-modal": "^2.0.1",
     "vue-server-renderer": "^2.6.14",
     "vue-template-compiler": "^2.6.14",
     "webpack": "^4.46.0"

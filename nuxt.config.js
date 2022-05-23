@@ -26,8 +26,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~/plugins/click-outside.js',
-    { src: "~/plugins/vue-js-modal", mode: "client" }
+    '~/plugins/click-outside.js'
   ],
 
   serverMiddleware: [

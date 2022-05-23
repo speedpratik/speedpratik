@@ -1,34 +1,9 @@
 <template>
     <main>
         <!-- Navbar -->
-        <NavbarSP />
+		<NavbarSP />
 
         <section v-if="id != null">
-            <modal name="submit-modal">
-                <div class="modal-content" v-if="tempsMit != null">
-                    <h1>Bon boulot!</h1>
-
-                    <section>
-                        <article>
-                            <span>Temps écoulé:</span>
-                            <span class="countdown">{{ tempsMit.string }}</span>
-                        </article>
-                        <!-- <article>
-                            <span>{{ errorsCount }} erreur(s).</span>
-                            <i class="fa-solid fa-circle-exclamation"></i>
-                        </article>
-
-                        <article v-if="this.$auth.loggedIn">
-                            <span>+ {{ Math.floor(300 * Math.exp(-2 * tempsMit.time)) }}xp.</span>
-                            <i class="fa-solid fa-flask"></i>
-                        </article> -->
-                    </section>
-
-                    <button @click="$router.push('/')">Retour</button>
-                </div>
-            </modal>
-            <canvas id="confettis"></canvas>
-
             <article id="ide">
                 <section id="consigne">
                     <span
@@ -36,7 +11,7 @@
                         v-if="!this.$auth.loggedIn"
                     >Tu n'es pas connecté! Tes performances ne seront pas enregistrées.</span>
 
-                    <ul v-for="exercice of exercise">
+                    <ul v-for="exercice of exercise.exercises">
                         <li class="enonce">
                             <h1>{{ exercice.topic }}</h1>
                             <span v-html="$md.render(exercice.question)"></span>
@@ -50,12 +25,11 @@
                 </section>
 
                 <section id="interface">
-                    <article class="codingArea" v-for="exercice of exercise">
+                    <article class="codingArea" v-for="exercice of exercise.exercises">
                         <div
                             :id="`editor_${exercice.id}`"
                             class="editor"
                         >{{ exercice.program != null ? exercice.program : "" }}</div>
-
                         <ul :id="`output_${exercice.id}`" class="output">
                             <li>>>></li>
                         </ul>
@@ -73,10 +47,8 @@
                                 @click="execPython(1)"
                             >Éxecuter deuxième fenêtre de code</button>
 
-                            <div v-if="runner != null">
-                                <button v-if="canValidate" @click="validation">Soumettre</button>
-                                <button v-else disabled>Soumettre</button>
-                            </div>
+                            <button v-if="canValidate">Soumettre</button>
+                            <button v-else disabled>Soumettre</button>
                         </article>
                     </section>
                 </section>
@@ -89,7 +61,6 @@
 <script>
 import NavbarSP from "~/components/NavbarSP.vue"
 import CodeFlask from "codeflask"
-import Confettis from "canvas-confetti"
 
 
 export default {
@@ -103,11 +74,9 @@ export default {
                         this.runner = await loadPyodide();
 
                         // On en profite pour set up l'editeur
-                        for (const exercice of this.exercise) {
+                        for (const exercice of this.exercise.exercises) {
                             const editor = new CodeFlask(`#editor_${exercice.id}`, { language: "js", lineNumbers: true });
-                            const code = editor.getCode();
-
-                            editor.updateCode(this.decodeHtml(code));
+                            editor.updateCode(this.decodeHtml(editor.getCode()));
 
                             document.getElementById(`editor_${exercice.id}`).classList.add("active");
                             this.editors.push(editor);
@@ -125,42 +94,29 @@ export default {
             exercise: null,
             runner: null,
             editors: [],
-            validate: [true, true],
-            canValidate: false,
-
-            // Statistiques
-            startedExercise: new Date(),
-            errorsCount: 0,
-            tempsMit: null
+            validate: [false, true],
+            canValidate: false
         }
     },
 
     async fetch() {
-        /* Récupère l'exo */
-        if (this.id != null) {
-            const exercise = await this.getSubjectExerciseFromId(this.id);
-            this.exercise = exercise;
-
-            // Exo introuvable dans la bdd
-            if (this.exercise.length == 0) this.$router.push("/");
-        }
+        const exercise = this.getExerciseFromId();
+        this.exercise = exercise;
     },
 
-    async created() {
-        if (process.client) {
-            const ID = window.localStorage.getItem("idSubject");
-            window.localStorage.removeItem("idSubject");
-            this.id = ID;
+    async mounted() {
+        const ID = localStorage.getItem("idSubject");
+        localStorage.removeItem("idSubject");
+        this.id = ID;
 
-            /* Empêche les utilisateurs d'avoir accès à la page sans ID */
-            if (ID == null) this.$router.push("/");
+        /* Empêche les utilisateurs d'avoir accès à la page sans ID */
+        if (ID == null) this.$router.push("/");
 
-            /* Ajoute log a la fenêtre */
-            window.pythonLog = this.log;
+        /* Ajoute log a la fenêtre */
+        window.pythonLog = this.log;
 
-            /* Initialise la variable CanValidate */
-            this.canValidate = this.validate[0] && this.validate[1];
-        }
+        /* Initialise la variable CanValidate */
+        this.canValidate = this.validate[0] && this.validate[1];
     },
 
 
@@ -187,12 +143,9 @@ export default {
         /* Execute le python */
         async execPython(editorIndex) {
             const _code = this.editors[editorIndex].getCode();
-
-            // Créer un code personnalisé pour interargir avec le dom aussi
             let codeToExec = `import js\ndef print(content):\tjs.pythonLog("none", repr(content), ${editorIndex + 1}, False)\n${_code}\n`
 
-            // Ajoute les asserts
-            const asserts = this.exercise.filter(ex => ex.id == editorIndex + 1)[0].asserts;
+            const asserts = this.exercise.exercises.filter(ex => ex.id == editorIndex + 1)[0].asserts;
             asserts.map(assert => { codeToExec += `assert ${assert[0]} == ${assert[1]}, "Ton programme ne passe pas les asserts!"\n`; })
             codeToExec += `print("Succès!")`;
 
@@ -202,78 +155,47 @@ export default {
                 this.log("error", e, editorIndex + 1);
                 this.validate[editorIndex] = false;
 
-                this.errorsCount += 1;
-
                 return this.canValidate = this.validate[0] && this.validate[1];
             }
 
-            // Valide le code
             this.validate[editorIndex] = true;
             return this.canValidate = this.validate[0] && this.validate[1];
         },
 
-        /* Récupère l'exo d'un sujet depuis l'id de celui-ci */
-        getSubjectExerciseFromId(id) {
-            return new Promise(async (res, rej) => {
-                try {
-                    const req = await this.$axios.$get(`/api/subjects/id/${id}/exercises`);
-                    res(req);
-                } catch (e) {
-                    rej(e);
-                }
-            });
-        },
-
-        /* Temps entre deux dates */
-        differenceDate() {
-            const diff = new Date() - this.startedExercise;
-            const date = new Date(diff);
-
+        /* Récupère un exercice depuis l'id de celui-ci */
+        getExerciseFromId(id) {
             return {
-                string: date.toISOString().substr(11, 8),
-                time: date.getHours() / 60
-            } 
-        },
-
-        /* Valide l'exercice */
-        validation() {
-            const canvas = document.getElementById("confettis");
-            canvas.style.display = "block";
-
-            // Assigne les variables
-            this.$modal.show("submit-modal");
-            this.tempsMit = this.differenceDate();
-            this.canValidate = false;
-
-            console.log(this.tempsMit);
-
-            const duration = 2000;
-            const end = Date.now() + duration;
-
-            const confettis = Confettis.create(canvas, {
-                resize: true,
-                useWorker: true
-            });
-
-            // Confettis
-            (function frame() {
-                confettis({
-                    particleCount: 7,
-                    angle: 0,
-                    spread: 255,
-                    origin: { x: 0, y: 0.5 }
-                });
-
-                confettis({
-                    particleCount: 7,
-                    angle: 180,
-                    spread: 255,
-                    origin: { x: 1, y: 0.5 }
-                });
-
-                if (Date.now() < end) requestAnimationFrame(frame);
-            }());
-
+                "id": 1,
+                "session": 2022,
+                "link": "https://eduscol.education.fr/document/33178/download",
+                "difficulty": 1,
+                "flags": 0,
+                "exercises": [
+                    {
+                        "id": 1,
+                        "type": 0,
+                        "topic": "Algorithmes de Recherche",
+                        "question": "Écrire une fonction `recherche` qui prend en paramètres `caractere`, un caractère, et `mot`, une chaîne de caractères, et qui renvoie le nombre d’occurrences de `caractere` dans `mot`, c’est-à-dire le nombre de fois où `caractere` apparaît dans `mot`.",
+                        "asserts": [
+                            ["recherche('e', \"sciences\")", 2],
+                            ["recherche('i', \"mississippi\")", 4],
+                            ["recherche('a', \"mississippi\")", 0]
+                        ],
+                        "program": null
+                    },
+                    {
+                        "id": 2,
+                        "type": 1,
+                        "topic": "Algorithmes Glouton",
+                        "question": "On s’intéresse à un algorithme récursif qui permet de rendre la monnaie à partir d’une liste donnée de valeurs de pièces et de billets - le système monétaire est donné sous forme d’une liste `pieces=[100, 50, 20, 10, 5, 2, 1]` - (on supposera qu’il n’y a pas de limitation quant à leur nombre), on cherche à donner la liste de pièces à rendre pour une somme donnée en argument.\nCompléter le code Python ci-dessous de la fonction rendu_glouton qui implémente cet algorithme et renvoie la liste des pièces à rendre",
+                        "asserts": [
+                            ["rendu_glouton(68, [], 0)", "[50, 10, 5, 2, 1]"],
+                            ["rendu_glouton(291, [], 0)", "[100, 100, 50, 20, 20, 1]"]
+                        ],
+                        "program": "Pieces = [100,50,20,10,5,2,1]\ndef rendu_glouton(arendre, solution=[], i=0):\n\tif arendre == 0:\n\t\treturn ...\n\tp = Pieces[i],\n\tif p <= ... :\n\t\tsolution.append(...)\n\t\treturn rendu_glouton(arendre - p, solution, i)\n\telse :\n\t\treturn rendu_glouton(arendre, solution, ...)"
+                    }
+                ]
+            }
         }
     },
 
