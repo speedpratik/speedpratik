@@ -12,7 +12,7 @@
 				<img v-if="userDetails" @click="dropDown = true" :src="userDetails.avatar" alt="Avatar" id="navAvatar" loading="lazy" />
 
 				<ul v-if="dropDown" data-linked="navAvatar" v-click-outside id="dropdown">
-					<li>Profil</li>
+					<li @click="profile">Profil</li>
 					<li class="hoverRed" @click="logout">Déconnexion</li>
 				</ul>
 			</li>
@@ -46,6 +46,9 @@ export default {
 	methods: {
 		/* Redirige sur la page de connexion */
 		login() { this.$router.push("/login"); },
+
+		/* Redirige sur la page de profil */
+		profile() { this.$router.push("/profile"); },
 		
 		/* Déconnecte l'utilisateur */
 		logout() { this.$auth.logout(); },
