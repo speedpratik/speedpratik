@@ -1,70 +1,115 @@
-module.exports = (app, db) => {
-  app.get('/subjects/id/:subjectId/exercises', async (req, res) => {
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify(await db.exercises.getAllFromSubjectID(req.params.subjectId)))
-  })
+module.exports = (db) => {
+  const module = {}
 
-  app.get('/subjects/id/:subjectId/exercises/:exerciseNumber', async (req, res) => {
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify(await db.exercises.getAllFromSubjectIDAndExerciseNumber(req.params.subjectId, req.params.exerciseNumber)))
-  })
+  module.initialize = () => {
+    db.run('CREATE TABLE IF NOT EXISTS exercises (' +
+      'id INTEGER PRIMARY KEY,' +
+      'type INTEGER NOT NULL,' +
+      'subject INTEGER,' +
+      'number INTEGER,' +
+      'topic TEXT,' +
+      'question TEXT NOT NULL,' +
+      'asserts TEXT,' +
+      'program TEXT' +
+      ')')
+  }
 
-  app.get('/exercises', async (req, res) => {
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify(await db.exercises.get()))
-  })
+  module.getAllFromSubjectID = (subjectId) => {
+    return new Promise((resolve, reject) => {
+      db.all('SELECT * FROM exercises WHERE subject=? LIMIT 100', [subjectId], (err, rows) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(rows)
+      })
+    })
+  }
 
-  app.get('/exercises/id/:exerciseId', async (req, res) => {
-    const exercise = await db.exercises.getByID(req.params.exerciseId)
+  module.getAllFromSubjectIDAndExerciseNumber = (subjectId, exerciseNumber) => {
+    return new Promise((resolve, reject) => {
+      db.all('SELECT * FROM exercises WHERE subject=? AND number=? LIMIT 100', [subjectId, exerciseNumber], (err, rows) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(rows)
+      })
+    })
+  }
 
-    if (exercise === null) {
-      res.send(404)
-    } else {
-      res.setHeader('Content-Type', 'application/json')
-      res.end(JSON.stringify(exercise))
+  module.get = () => {
+    return new Promise((resolve, reject) => {
+      db.all('SELECT * FROM exercises LIMIT 100', [], (err, rows) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(rows)
+      })
+    })
+  }
+
+  module.getByID = (id) => {
+    return new Promise((resolve, reject) => {
+      db.get('SELECT * FROM exercises WHERE id=?', [id], (err, row) => {
+        if (err) {
+          return reject(err)
+        }
+        if (row === undefined) {
+          return resolve(null)
+        }
+        resolve(row)
+      })
+    })
+  }
+
+  module.getByType = (type) => {
+    return new Promise((resolve, reject) => {
+      db.all('SELECT * FROM exercises WHERE type=? LIMIT 100', [type], (err, rows) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(rows)
+      })
+    })
+  }
+
+  module.getByQuestionAndTopic = (question, topic) => {
+    return new Promise((resolve, reject) => {
+      db.get('SELECT * FROM exercises WHERE question=? AND topic=?', [question, topic], (err, row) => {
+        if (err) {
+          return reject(err)
+        }
+        if (row === undefined) {
+          return resolve(null)
+        }
+        resolve(row)
+      })
+    })
+  }
+
+  module.create = async (exercise) => {
+    const dbExercise = await module.getByQuestionAndTopic(exercise.question, exercise.topic)
+
+    // Prevents the creation of duplicated exercises
+    if (dbExercise) {
+      return dbExercise
     }
-  })
 
-  app.get('/exercises/type/:exerciseType', async (req, res) => {
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify(await db.exercises.getByType(req.params.exerciseType)))
-  })
+    db.run('INSERT INTO exercises(type, subject, number, topic, question, asserts, program) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [exercise.type, exercise.subject, exercise.number, exercise.topic, exercise.question, exercise.asserts, exercise.program])
 
-  app.post('/exercises', async (req, res) => {
-    // Checks that all required user fields are filled by first getting necessary fields
-    const exercises = {
-      type: req.body.type,
-      topic: req.body.topic,
-      question: req.body.question,
-      asserts: req.body.asserts,
-      program: req.body.program
-    }
+    return await module.getByQuestionAndTopic(exercise.question, exercise.topic) // Returns the newly created exercise object
+  }
 
-    if (!Object.values(exercises).every(element => element !== undefined)) {
-      return res.sendStatus(400)
-    }
+  module.modify = async (exercise) => {
+    db.run('UPDATE exercises SET type=?, subject=?, number=?, topic=?, question=?, asserts=?, program=? WHERE id=?',
+      [exercise.type, exercise.subject, exercise.number, exercise.topic, exercise.question, exercise.asserts, exercise.program, exercise.id])
 
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify(await db.exercises.create({
-      ...exercises,
-      subject: req.body.subject,
-      number: req.body.number
-    })))
-  })
+    return await module.getByID(exercise.id)
+  }
 
-  app.put('/exercises/id/:exerciseId', async (req, res) => {
-    const exercise = await db.exercises.getByID(req.params.exerciseId)
+  module.delete = (id) => {
+    db.run('DELETE FROM exercises WHERE id=?', [id])
+  }
 
-    if (!exercise) {
-      return res.sendStatus(404)
-    }
-
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify(await db.exercises.modify({ ...exercise, ...req.body })))
-  })
-
-  app.delete('/exercises/id/:exerciseId', (req, res) => {
-    db.exercises.delete(req.params.exerciseId)
-    res.sendStatus(204)
-  })
+  return module
 }
