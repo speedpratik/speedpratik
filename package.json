@@ -7,7 +7,7 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
+    "lint:js": "eslint --ext \".js,.vue\" .",
     "lint": "npm run lint:js",
     "lintfix": "npm run lint:js -- --fix"
   },
@@ -19,7 +19,6 @@
     "core-js": "^3.19.3",
     "express": "^4.18.1",
     "nuxt": "^2.15.8",
-    "prismjs": "^1.28.0",
     "sqlite3": "^5.0.8",
     "vue": "^2.6.14",
     "vue-server-renderer": "^2.6.14",
