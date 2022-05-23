@@ -8,16 +8,16 @@ Represents each exercises of a given subject. Only two instances are given in th
 
 ### Exercise Structure
 
-| Field      | Type   | Description                                                               |
-|------------|--------|---------------------------------------------------------------------------|
-| `id`       | int    | the exercise's id                                                         |
-| `type`     | int    | the exercise's [question type](/subjects?id=exercise-type)                |
-| `subject`  | int    | the exercise's linked subject ID                                          |
-| `number`   | int    | the exercise's number within the subject                                  |
-| `topic`    | string | the exercise's thematic                                                   |
-| `question` | string | the exercise's markdown parsed question                                   |
-| `asserts`  | array  | the exercise's [asserts](/subjects?id=asserts-sub-structure), if provided |                        
-| `program`  | string | the exercise's Python parsed program, if provided                         |
+| Field      | Type   | Description                                                                |
+|------------|--------|----------------------------------------------------------------------------|
+| `id`       | int    | the exercise's id                                                          |
+| `type`     | int    | the exercise's [question type](/exercises?id=exercise-type)                |
+| `subject`  | int    | the exercise's linked subject ID                                           |
+| `number`   | int    | the exercise's number within the subject                                   |
+| `topic`    | string | the exercise's thematic                                                    |
+| `question` | string | the exercise's markdown parsed question                                    |
+| `asserts`  | array  | the exercise's [asserts](/exercises?id=asserts-sub-structure), if provided |                        
+| `program`  | string | the exercise's Python parsed program, if provided                          |
 
 #### Exercise examples
 
@@ -65,6 +65,8 @@ Represents each exercises of a given subject. Only two instances are given in th
 
 The asserts sub-structure is represented by a two-dimensional array containing a couple of values being: the function to be tested; and the return value.
 
+## API Endpoints
+
 ### Get exercise
 #### `GET /subjects/id/{subject.id}/exercises`
 
@@ -89,7 +91,7 @@ Returns the first 100 retrieved exercises objects of given type from the databas
 ### Create exercise
 #### `POST /exercises`
 
-Creates new subject with the all [Exercise Structure](/exercises?id=exercise-structure) fields except for ID. Returns newly created exercise.
+Creates new subject with all [Exercise Structure](/exercises?id=exercise-structure) fields except for ID. Returns newly created exercise.
 
 ### Modify exercise
 #### `PUT /exercises/id/{exercise.id}`
