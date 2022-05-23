@@ -3,6 +3,11 @@
         <!-- Navbar -->
         <NavbarSP />
 
+        <section v-if="runner == null && id != null" id="loading">
+            <h1>Chargement de python, ca arrive!</h1>
+            <span>Le chargement peut prendre plus ou moins longtemps en fonction de votre connexion.</span>
+        </section>
+
         <section v-if="id != null">
             <modal name="submit-modal">
                 <div class="modal-content" v-if="tempsMit != null">

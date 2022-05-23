@@ -1,3 +1,27 @@
+/* Ecran de chargement */
+#loading {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 100px; left: 0;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: var(--main-dark-lighter);
+    color: white;
+    user-select: none;
+}
+#loading h1 {
+    font-style: italic;
+    font-family: 'Koulen', cursive;
+    font-size: 2.4pc;
+    animation: loading 3s ease infinite;
+}
+#loading span { font-family: 'Jost', sans-serif; opacity: 0.5; }
+
+
+/* IDE */
 #ide {
     display: flex;
     height: calc(100vh - 100px);
@@ -46,7 +70,6 @@
     margin-bottom: 0;
 }
 
-
 #ide section#interface {
     display: flex;
     flex-direction: column;
@@ -58,6 +81,8 @@
     overflow-y: auto;
 }
 
+
+/* Pour les textareas de code */
 #ide .codingArea {
     display: flex;
     flex-direction: row;
@@ -67,7 +92,6 @@
     height: 250px;
     overflow: hidden;
 }
-
 
 #ide .output {
     width: 43%;
@@ -81,7 +105,6 @@
     list-style-type: none;
 }
 #ide .output .error { color: var(--main-red); }
-
 
 #ide .editor {
     flex-shrink: 1;
@@ -110,6 +133,8 @@
 #ide .editor .codeflask *::selection { background: rgba(0, 0, 0, 0.1); }
 #ide .editor .codeflask * { font-family: 'Inconsolata', monospace; font-size: 15px; }
 
+
+/* Footer */
 #ide #footer {
     display: flex;
     flex-direction: row;
@@ -133,6 +158,8 @@
 #ide #footer article button:hover { transform: translateY(0); opacity: 1; background-color: var(--main-purple-lighter); }
 #ide #footer article button:disabled:hover { opacity: .5; }
 
+
+/* 🎉 */
 #confettis {
     position: absolute;
     top: 100px; left: 0;
@@ -141,4 +168,12 @@
     z-index: 100;
     display: none;
     cursor: not-allowed;
+}
+
+
+/* Animations */
+@keyframes loading {
+    0% { opacity: .5; }
+    50% { opacity: 1; }
+    100% { opacity: .5; }
 }
