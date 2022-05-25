@@ -33,6 +33,7 @@ module.exports = (app, db) => {
     const submission = {
       user: req.body.user,
       start_date: req.body.start_date,
+      type: req.body.type,
       programs: JSON.stringify(req.body.programs)
     }
 
