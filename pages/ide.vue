@@ -35,7 +35,7 @@
             <canvas id="confettis"></canvas>
 
             <article id="ide">
-                <section id="consigne">
+                <section id="consigne" v-if="runner != null">
                     <span
                         class="announcement"
                         v-if="!this.$auth.loggedIn"
@@ -133,7 +133,7 @@ export default {
             exercise: null,
             runner: null,
             editors: [],
-            validate: [false, false],
+            validate: [true, true],
             canValidate: false,
 
             // Statistiques
