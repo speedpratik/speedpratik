@@ -9,10 +9,10 @@
 				<div class="daily">
 					<span>Prochain exercice dans</span>
 					<h2>{{ timeLeft }}</h2>
-					<button @click="startExercise(true)">Compléter</button>
+					<button @click="startExercise(true, 2)">Compléter</button>
 				</div>
 				<h1>Exercice Quotidien</h1>
-				<h2>Sujet #{{ quotiChallengeNumber }}</h2>
+				<h2>Sujet #{{ quotiExercise ? ("0000" + quotiExercise.number).slice(-4) : "0001" }}</h2>
 				<span>Les exercices quotidiens sont des exercices d’épreuve pratique niveau rouge rapportant un nombre de point supérieur aux exercices de base.</span>
 			</article>
 
@@ -20,19 +20,19 @@
 				<section class="modes" id="sr">
 					<h1>Mode Speedrun</h1>
 					<span>Complétez un exercice aléatoire de la manière la plus rapide possible!</span>
-					<button>Commencer</button>
+					<button @click="startExercise(false, 1)">Commencer</button>
 				</section>
 
 				<section class="modes" id="comp">
 					<h1>Mode Competitif</h1>
 					<span>Complétez un exercice aléatoire dans le but de gagner des points!</span>
-					<button>Commencer</button>
+					<button @click="startExercise(false, 0)">Commencer</button>
 				</section>
 
 				<section class="modes" id="train">
 					<h1>Mode pratique</h1>
 					<span>Révisez vos épreuves pratique sans vous mettre la pression.</span>
-					<button>Commencer</button>
+					<button @click="startExercise(false, 3)">Commencer</button>
 				</section>
 
 				<StatsWindow />
@@ -45,6 +45,7 @@
 <script>
 import NavbarSP from "~/components/NavbarSP.vue"
 import StatsWindow from "~/components/StatsWindow.vue"
+import api from "~/plugins/api";
 
 export default {
 	name: "IndexPage",
@@ -55,11 +56,17 @@ export default {
 		/* Contenu à render dans la page */
 		return {
 			timeLeft: `${("0" + hours).slice(-2)}:${("0" + minutes).slice(-2)}:${("0" + seconds).slice(-2)}`,
-			quotiChallengeNumber: "0001"
+			quotiExercise: null,
 		}
 	},
 
-	mounted() {
+	async fetch() {
+		/* Récupère les informations sur l'exercice quotidien */
+		const quoti = await api.getRandomSubject([2], this.$axios);
+		this.quotiExercise = quoti;
+	},
+
+	async mounted() {
 		/* Update le timer de l'exercice quotidien */
 		setInterval(() => {
 			const { seconds, minutes, hours } = this.displayTimeLeft();
@@ -68,14 +75,13 @@ export default {
 			if (this.timeLeft != newValue) this.timeLeft = newValue;
 		}, 1000);
 
-		/* Récupère les informations sur l'exercice quotidien */
-		const { number } = this.getTodayExercise();
-		this.quotiChallengeNumber = number;
-
 		/* Regarde si ils sont mobiles ou tablettes */
 		if (this.$device.isMobileOrTablet && window.innerWidth <= 800) {
 			this.$router.push("/profile");
 		}
+
+		/* Toast pour dire qu'on est sur une demo */
+		this.$toast.show("Cette version est une version test! Le site sera mit à jour.");
 	},
 
 
@@ -95,27 +101,18 @@ export default {
 		},
 
 		/* Redirige vers la page d'IDE */
-		startExercise(daily = false) {
+		async startExercise(daily = false, type) {
 			let id;
-			if (daily) id = this.getTodayExercise().id;
-			else id = 1;
+			if (daily) id = this.quotiExercise.id;
+			else {
+				const exo = await api.getRandomSubject([2], this.$axios);
+				id = exo.id;
+			}
 
 
 			localStorage.setItem("idSubject", id);
-			localStorage.setItem("modeSubject", "daily");
+			localStorage.setItem("modeSubject", type);
 			this.$router.push("/ide");
-		},
-
-		/* Récupère l'exercice quotidien */
-		getTodayExercise() {
-
-			// A ADD: Calcul pour choisir l'exo quotidien comme ça pas besoin d'encombrer tout
-			return {
-				// ... //
-				id: 1,
-				number: "33178",
-				// ... //
-			};
 		}
 	},
 

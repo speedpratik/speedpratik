@@ -116,6 +116,13 @@ button:active { transform: translateY(0); opacity: 1; }
 
 .mobile { display: none; }
 
+.toasted {
+    font-family: 'Jost', sans-serif; 
+    font-size: 18px !important;
+    padding: 10px 30px !important;
+    background-color: var(--main-dark) !important;
+}
+
 #stats {
     user-select: none;
     display: flex;

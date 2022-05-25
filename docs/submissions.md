@@ -77,8 +77,8 @@ The submission must have either `subject` or `exercise` values but not both.
 |:-----:|------|------------------------------|
 |  `0`  | int  | For competitive submissions  |
 |  `1`  | int  | For Speedrunning submissions |
-|  `2`  | int  | For daily' submissions       |
-|  `3`  | int  | For practise submissions     |
+|  `2`  | int  | For daily submissions       |
+|  `3`  | int  | For practice submissions     |
 
 #### Programs Sub-structure
 
