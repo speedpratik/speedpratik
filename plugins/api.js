@@ -29,7 +29,7 @@ export default {
                 });
                 res(req);
             } catch (e) {
-                auth.loginWith(strategy); // Reconnection, erreur
+                rej(e);
             }
         });
     },
