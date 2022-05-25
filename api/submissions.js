@@ -44,15 +44,24 @@ module.exports = (app, db) => {
       return res.sendStatus(400)
     }
 
+    const user = await db.users.get(submission.user)
+
     let submissionNumber
     if (req.body.subject) {
       submissionNumber = await db.submissions.countSubmissionsByUserOnSubject(req.body.user, req.body.subject) + 1
+      user.completed_subjects++
     } else {
       submissionNumber = await db.submissions.countSubmissionsByUserOnExercise(req.body.user, req.body.exercise) + 1
+      user.completed_exercises++
     }
 
     const submitDate = Date.now()
     const xpAward = 300 * Math.exp(((-2 * (submitDate - submission.start_date) / 60) / 60) / 1000)
+
+    user.xp += xpAward
+    user.accumulated_time += submitDate - submission.start_date
+
+    await db.users.modify(user)
 
     res.setHeader('Content-Type', 'application/json')
     res.end(JSON.stringify(await db.submissions.create({
