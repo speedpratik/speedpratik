@@ -57,7 +57,6 @@ export default {
             for (const difficulty of difficultyRange){
                 try {
                     const req = await axios.$get(`/api/subjects/difficulty/${difficulty}`);
-                    console.log(res);
                     for (const subject of req){ subjects.push(subject); }
                 } catch (e) {
                     rej(e);

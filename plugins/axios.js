@@ -7,10 +7,6 @@ export default function ({ $axios, error: nuxtError }) {
     });
 
     $axios.onResponse(response => {
-        $axios.setHeader('authorization_token', process.env.API_AUTHORIZATION_TOKEN)
+        $axios.setToken('123', 'Bearer')
     });
-
-    $axios.onRequest(request => {
-        $axios.setHeader('authorization_token', process.env.API_AUTHORIZATION_TOKEN)
-    })
 }
