@@ -130,7 +130,7 @@ export default {
         /* Contenu à render dans la page */
         return {
             id: null,
-            mode: null, // ["speedrun", "compet", "practice", "daily"]
+            mode: null, // 0 = compet, 1 = speedrun, 2 = daily, 3 practice
             exercise: null,
             runner: null,
             editors: [],
@@ -298,6 +298,7 @@ export default {
                     const req = await this.$axios.$post("/api/submissions", {
                         user: userDetails.id,
                         subject: parseInt(this.id),
+                        type: parseInt(this.mode),
                         start_date: this.startedExercise,
                         programs: [
                             this.editors[0].getCode(),

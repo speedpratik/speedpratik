@@ -50,7 +50,8 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
     '@nuxtjs/markdownit',
-    '@nuxtjs/device'
+    '@nuxtjs/device',
+    '@nuxtjs/toast',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -63,8 +64,15 @@ export default {
   build: {
   },
 
+  toast: {
+    position: 'bottom-right'
+  },
+
   markdownit: {
-    runtime: true // Support `$md()`
+    runtime: true, // Support `$md()`
+    use: [
+      'markdown-it-katex'
+    ]
   },
 
   auth: {

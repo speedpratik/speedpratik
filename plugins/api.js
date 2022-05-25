@@ -46,4 +46,26 @@ export default {
             }
         });
     },
+
+
+    /* Récupère un sujet aléatoire dans une range de difficulté */
+    getRandomSubject(difficultyRange, axios){
+
+        return new Promise(async (res, rej) => {
+            const subjects = [];
+
+            for (const difficulty of difficultyRange){
+                try {
+                    const req = await axios.$get(`/api/subjects/difficulty/${difficulty}`);
+                    console.log(res);
+                    for (const subject of req){ subjects.push(subject); }
+                } catch (e) {
+                    rej(e);
+                }
+            }
+
+            const randomized = subjects[Math.floor(Math.random() * subjects.length)]
+            return res(randomized);
+        });
+    }
 }
