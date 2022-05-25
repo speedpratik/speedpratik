@@ -7,6 +7,12 @@ export default function ({ $axios, error: nuxtError }) {
     });
 
     $axios.onResponse(response => {
-        $axios.setToken('123', 'Bearer')
+        $axios.setHeader('authorization_token', 'THISISATEST')
+        return Promise.resolve(response)
+    });
+
+    $axios.onRequest(request => {
+        $axios.setHeader('authorization_token', 'THISISATEST')
+        return Promise.resolve(request)
     });
 }
