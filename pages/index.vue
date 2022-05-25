@@ -71,6 +71,11 @@ export default {
 		/* Récupère les informations sur l'exercice quotidien */
 		const { number } = this.getTodayExercise();
 		this.quotiChallengeNumber = number;
+
+		/* Regarde si ils sont mobiles ou tablettes */
+		if (this.$device.isMobileOrTablet && window.innerWidth <= 800) {
+			this.$router.push("/profile");
+		}
 	},
 
 
@@ -97,6 +102,7 @@ export default {
 
 
 			localStorage.setItem("idSubject", id);
+			localStorage.setItem("modeSubject", "daily");
 			this.$router.push("/ide");
 		},
 

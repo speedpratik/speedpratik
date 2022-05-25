@@ -130,6 +130,7 @@ export default {
         /* Contenu à render dans la page */
         return {
             id: null,
+            mode: null, // ["speedrun", "compet", "practice", "daily"]
             exercise: null,
             runner: null,
             editors: [],
@@ -160,7 +161,12 @@ export default {
         if (process.client) {
             const ID = window.localStorage.getItem("idSubject");
             window.localStorage.removeItem("idSubject");
+
+            const MODE = window.localStorage.getItem("modeSubject");
+            window.localStorage.removeItem("modeSubject");
+
             this.id = ID;
+            this.mode = MODE;
 
             /* Empêche les utilisateurs d'avoir accès à la page sans ID */
             if (ID == null) this.$router.push("/");
@@ -170,6 +176,11 @@ export default {
 
             /* Initialise la variable CanValidate */
             this.canValidate = this.validate[0] && this.validate[1];
+
+            /* Regarde si ils sont mobiles ou tablettes */
+            if (this.$device.isMobileOrTablet && window.innerWidth <= 800) {
+                this.$router.push("/profile");
+            }
         }
     },
 

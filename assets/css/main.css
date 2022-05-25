@@ -114,6 +114,7 @@ button:active { transform: translateY(0); opacity: 1; }
     margin-bottom: 3vh;
 }
 
+.mobile { display: none; }
 
 #stats {
     user-select: none;
@@ -149,4 +150,10 @@ button:active { transform: translateY(0); opacity: 1; }
 
 @keyframes fadein {
     from { opacity: 0; }
+}
+
+
+/* Responsive */
+@media screen and (max-width: 800px) {
+    .mobile { display: block; }
 }

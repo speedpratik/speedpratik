@@ -49,7 +49,8 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
-    '@nuxtjs/markdownit'
+    '@nuxtjs/markdownit',
+    '@nuxtjs/device'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
