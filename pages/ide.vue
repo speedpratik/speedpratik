@@ -23,7 +23,7 @@
                             <span class="countdown">{{ errorsCount }}</span>
                         </article>
 
-                        <article v-if="this.$auth.loggedIn">
+                        <article v-if="this.$auth.loggedIn && mode != 3">
                             <span>XP récolté</span>
                             <span class="countdown">{{ xp_award }}</span>
                         </article>
@@ -254,8 +254,8 @@ export default {
             this.tempsMit = this.differenceDate();
             this.canValidate = false;
 
-            // Submit l'exercice (Seulement si il est co)
-            if (this.$auth.loggedIn) {
+            // Submit l'exercice (Seulement si il est co & pas en practice)
+            if (this.$auth.loggedIn && this.mode != 3) {
                 const { xp_award } = await this.submissionAPI();
                 this.xp_award = Math.floor(xp_award);
             }
