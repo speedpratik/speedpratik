@@ -18,15 +18,15 @@
                             <span>Temps écoulé:</span>
                             <span class="countdown">{{ tempsMit.string }}</span>
                         </article>
-                        <!-- <article>
-                            <span>{{ errorsCount }} erreur(s).</span>
-                            <i class="fa-solid fa-circle-exclamation"></i>
+                        <article>
+                            <span>Erreur(s) python</span>
+                            <span class="countdown">{{ errorsCount }}</span>
                         </article>
 
                         <article v-if="this.$auth.loggedIn">
-                            <span>+ {{ Math.floor(300 * Math.exp(-2 * tempsMit.time)) }}xp.</span>
-                            <i class="fa-solid fa-flask"></i>
-                        </article> -->
+                            <span>XP récolté</span>
+                            <span class="countdown">{{ xp_award }}</span>
+                        </article>
                     </section>
 
                     <button @click="$router.push('/')">Retour</button>
@@ -108,7 +108,7 @@ export default {
                         this.runner = await loadPyodide();
 
                         // On démarre le timer
-                        this.startedExercise = new Date();
+                        this.startedExercise = Date.now();
 
                         // On en profite pour set up l'editeur
                         for (const exercice of this.exercise) {
@@ -133,13 +133,14 @@ export default {
             exercise: null,
             runner: null,
             editors: [],
-            validate: [true, true],
+            validate: [false, false],
             canValidate: false,
 
             // Statistiques
             startedExercise: null,
             errorsCount: 0,
-            tempsMit: null
+            tempsMit: null,
+            xp_award: null
         }
     },
 
@@ -153,6 +154,7 @@ export default {
             if (this.exercise.length == 0) this.$router.push("/");
         }
     },
+    fetchOnServer: true,
 
     async created() {
         if (process.client) {
@@ -244,7 +246,7 @@ export default {
         },
 
         /* Valide l'exercice */
-        validation() {
+        async validation() {
             const canvas = document.getElementById("confettis");
             canvas.style.display = "block";
 
@@ -253,8 +255,13 @@ export default {
             this.tempsMit = this.differenceDate();
             this.canValidate = false;
 
-            console.log(this.tempsMit);
+            // Submit l'exercice (Seulement si il est co)
+            if (this.$auth.loggedIn) {
+                const { xp_award } = await this.submissionAPI();
+                this.xp_award = Math.floor(xp_award);
+            }
 
+            // Confettis pendant 2s
             const duration = 2000;
             const end = Date.now() + duration;
 
@@ -281,7 +288,63 @@ export default {
 
                 if (Date.now() < end) requestAnimationFrame(frame);
             }());
+        },
 
+        /* Récupère les infos utilisateur */
+		getUserDetails() {
+			return new Promise(async (res, rej) => {
+				const strategy = this.$auth.$state.strategy;
+				const infos = {
+					username: null,
+					avatarLink: null,
+					email: null,
+					oauth: strategy
+				}
+
+				switch (strategy) {
+					case "discord":
+						const { username, id, avatar, email } = this.$auth.user;
+						infos.username = username;
+						infos.avatarLink = `https://cdn.discordapp.com/avatars/${id}/${avatar}.png?size=128`;
+						infos.email = email
+						break;
+				}
+
+
+				try {
+					const req = await this.$axios.$post("/api/users", {
+						username: infos.username,
+						email: infos.email,
+						oauth2: infos.oauth,
+						avatar: infos.avatarLink
+					});
+					res(req);
+				} catch(e) { 
+					this.$auth.loginWith(strategy); // Reconnection, erreur
+				}
+			});
+		},
+
+        /* API submission */
+        submissionAPI(){
+            return new Promise(async (res, rej) => {
+                try {
+                    const userDetails = await this.getUserDetails();
+
+                    const req = await this.$axios.$post("/api/submissions", {
+                        user: userDetails.id,
+                        subject: parseInt(this.id),
+                        start_date: this.startedExercise,
+                        programs: [
+                            this.editors[0].getCode(),
+                            this.editors[1].getCode()
+                        ]
+                    });
+                    res(req);
+                } catch (e) {
+                    rej(e);
+                }
+            });
         }
     },
 
