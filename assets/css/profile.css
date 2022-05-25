@@ -23,6 +23,10 @@
     font-style: italic;
     font-family: 'Koulen', cursive;
     margin: 2vh 0;
+    max-width: 65%;
+    height: 70px;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 #profileContent aside span { opacity: .5; }
 
