@@ -14,6 +14,8 @@ db.initialize()
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
+console.log(process.env.DISCORD_CLIENT_ID, process.env.API_AUTHORIZATION_TOKEN)
+
 require('./users')(app, db)
 require('./subjects')(app, db)
 require('./exercises')(app, db)
