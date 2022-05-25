@@ -24,12 +24,14 @@ export default {
 	components: { NavbarSP },
 
 	created () {
-		/* Empêche les utilisateurs connectés d'interargir avec la page */
-		if (this.$auth.loggedIn) this.$router.push("/");
+		if (process.client) {
+			/* Empêche les utilisateurs connectés d'interargir avec la page */
+			if (this.$auth.loggedIn) this.$router.push("/");
+		}
 	},
 
 	methods: {
-		discordAuth() { this.$auth.loginWith("discord"); }
+		discordAuth() { if (process.client) this.$auth.loginWith("discord"); }
 	}
 }
 </script>

@@ -1,6 +1,6 @@
 export default {
     /* Récupère les infos utilisateur */
-    getUserDetails: (auth, axios) => {
+    getUserDetails: (auth, api) => {
         return new Promise(async (res, rej) => {
             const strategy = auth.$state.strategy;
             const infos = {
@@ -21,7 +21,7 @@ export default {
 
 
             try {
-                const req = await axios.$post("/api/users", {
+                const req = await api.$post("users", {
                     username: infos.username,
                     email: infos.email,
                     oauth2: infos.oauth,
@@ -29,17 +29,17 @@ export default {
                 });
                 res(req);
             } catch (e) {
-                auth.loginWith(strategy); // Reconnection, erreur
+                rej(e);
             }
         });
     },
 
 
     /* Récupère le contenu d'un sujet à partir de son id */
-    getSubjectExerciseFromId: (id, axios) => {
+    getSubjectExerciseFromId: (id, api) => {
         return new Promise(async (res, rej) => {
             try {
-                const req = await axios.$get(`/api/subjects/id/${id}/exercises`);
+                const req = await api.$get(`subjects/id/${id}/exercises`);
                 res(req);
             } catch (e) {
                 rej(e);
@@ -49,14 +49,14 @@ export default {
 
 
     /* Récupère un sujet aléatoire dans une range de difficulté */
-    getRandomSubject(difficultyRange, axios){
+    getRandomSubject(difficultyRange, api){
 
         return new Promise(async (res, rej) => {
             const subjects = [];
 
             for (const difficulty of difficultyRange){
                 try {
-                    const req = await axios.$get(`/api/subjects/difficulty/${difficulty}`);
+                    const req = await api.$get(`subjects/difficulty/${difficulty}`);
                     for (const subject of req){ subjects.push(subject); }
                 } catch (e) {
                     rej(e);

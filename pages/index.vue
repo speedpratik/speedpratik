@@ -62,26 +62,29 @@ export default {
 
 	async fetch() {
 		/* Récupère les informations sur l'exercice quotidien */
-		const quoti = await api.getRandomSubject([2], this.$axios);
+		const quoti = await api.getRandomSubject([2], this.$api);
 		this.quotiExercise = quoti;
 	},
 
 	async mounted() {
-		/* Update le timer de l'exercice quotidien */
-		setInterval(() => {
-			const { seconds, minutes, hours } = this.displayTimeLeft();
-			const newValue = `${("0" + hours).slice(-2)}:${("0" + minutes).slice(-2)}:${("0" + seconds).slice(-2)}`;
 
-			if (this.timeLeft != newValue) this.timeLeft = newValue;
-		}, 1000);
+		if (process.client) {
+			/* Update le timer de l'exercice quotidien */
+			setInterval(() => {
+				const { seconds, minutes, hours } = this.displayTimeLeft();
+				const newValue = `${("0" + hours).slice(-2)}:${("0" + minutes).slice(-2)}:${("0" + seconds).slice(-2)}`;
 
-		/* Regarde si ils sont mobiles ou tablettes */
-		if (this.$device.isMobileOrTablet && window.innerWidth <= 800) {
-			this.$router.push("/profile");
+				if (this.timeLeft != newValue) this.timeLeft = newValue;
+			}, 1000);
+
+			/* Regarde si ils sont mobiles ou tablettes */
+			if (this.$device.isMobileOrTablet && window.innerWidth <= 800) {
+				this.$router.push("/profile");
+			}
+
+			/* Toast pour dire qu'on est sur une demo */
+			this.$toast.show("Cette version est une version test! Le site sera mit à jour.");
 		}
-
-		/* Toast pour dire qu'on est sur une demo */
-		this.$toast.show("Cette version est une version test! Le site sera mit à jour.");
 	},
 
 

@@ -293,7 +293,7 @@ export default {
         submissionAPI(){
             return new Promise(async (res, rej) => {
                 try {
-                    const userDetails = await api.getUserDetails(this.$auth, this.$axios);
+                    const userDetails = await api.getUserDetails(this.$auth, this.$api);
 
                     const req = await this.$axios.$post("/api/submissions", {
                         user: userDetails.id,

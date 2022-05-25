@@ -30,7 +30,7 @@ export default {
 	async fetch () {
 		/* Récupère les détails de l'utilisateur */
 		if (this.$auth.loggedIn) {
-			const details = await api.getUserDetails(this.$auth, this.$axios);
+			const details = await api.getUserDetails(this.$auth, this.$api);
 
             this.date = new Date(details.account_creation);
 			this.userDetails = details;
