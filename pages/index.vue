@@ -59,7 +59,6 @@ export default {
 		}
 	},
 
-
 	mounted() {
 		/* Update le timer de l'exercice quotidien */
 		setInterval(() => {

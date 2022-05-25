@@ -1,5 +1,5 @@
 <template>
-    <section id="stats" v-if="date != null && userDetails != null">
+    <section id="stats" v-if="date && userDetails">
         <article>
             <span>Compte créé le:</span>
             <h2>{{ ("0" + date.getDate()).slice(-2) + "/" + ("0" + parseInt(date.getMonth() + 1)).slice(-2) + "/" + date.getFullYear() }}</h2>
@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import api from "~/plugins/api";
+
 export default {
 	name: "StatsWindow",
 	data() {
@@ -28,7 +30,7 @@ export default {
 	async fetch () {
 		/* Récupère les détails de l'utilisateur */
 		if (this.$auth.loggedIn) {
-			const details = await this.getUserDetails();
+			const details = await api.getUserDetails(this.$auth, this.$axios);
 
             this.date = new Date(details.account_creation);
 			this.userDetails = details;
@@ -38,40 +40,7 @@ export default {
 
 	/* Fonctions */
 	methods: {
-		/* Récupère les infos utilisateur */
-		getUserDetails() {
-			return new Promise(async (res, rej) => {
-				const strategy = this.$auth.$state.strategy;
-				const infos = {
-					username: null,
-					avatarLink: null,
-					email: null,
-					oauth: strategy
-				}
 
-				switch (strategy) {
-					case "discord":
-						const { username, id, avatar, email } = this.$auth.user;
-						infos.username = username;
-						infos.avatarLink = `https://cdn.discordapp.com/avatars/${id}/${avatar}.png?size=128`;
-						infos.email = email
-						break;
-				}
-
-
-				try {
-					const req = await this.$axios.$post("/api/users", {
-						username: infos.username,
-						email: infos.email,
-						oauth2: infos.oauth,
-						avatar: infos.avatarLink
-					});
-					res(req);
-				} catch(e) { 
-					this.$auth.loginWith(strategy); // Reconnection, erreur
-				}
-			});
-		}
 	}
 }
 </script>

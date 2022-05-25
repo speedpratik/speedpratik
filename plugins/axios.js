@@ -7,5 +7,5 @@ export default function ({ $axios, error: nuxtError }) {
         return Promise.resolve(false);
     });
 
-    $axios.setHeader("Authorization", "Bearer test");
+    $axios.setToken('123', 'Bearer')
 }

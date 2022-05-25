@@ -1,36 +1,45 @@
 <template>
-    <main>
+    <main v-if="userDetails">
         <!-- Navbar -->
         <NavbarSP />
 
-        <h1>Bengladesh</h1>
+        <h1>{{ userDetails.username }}</h1>
+        <img :src="userDetails.avatar" alt="Avatar" id="navAvatar" loading="lazy" />
+        <span>Flags: {{ userDetails.flags }}</span>
+        <span>Sujets complétés: {{ userDetails.completed_subjects }}</span>
+
+        <span>XP & Level: {{ userDetails.xp }} / {{ userDetails.level }}</span>
+        <span>Création du compte: {{ new Date(userDetails.account_creation) }}</span>
+        <span>Temps accumulé: {{ userDetails.accumulated_time }}</span>
     </main>
 </template>
 
 <script>
 import NavbarSP from "~/components/NavbarSP.vue"
+import api from "~/plugins/api";
 
 export default {
-    name: "Ide",
+    name: "Profile",
     head() {
         return {
-            title: "Speedpratik",
+            title: "Speedpratik | Profil",
         }
     },
 
     data() {
         /* Contenu à render dans la page */
         return {
-
+            userDetails: null,
         }
     },
 
     async fetch() {
-
+        this.userDetails = await api.getUserDetails(this.$auth, this.$axios);
     },
 
     async created() {
- 
+        /* Empêche les utilisateurs connectés d'interargir avec la page */
+		if (!this.$auth.loggedIn) this.$router.push("/");
     },
 
 
