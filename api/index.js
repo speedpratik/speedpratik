@@ -14,19 +14,6 @@ db.initialize()
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-app.use((req, res, next) => {
-  switch (req.get('authorization_token')) {
-    case undefined:
-      res.sendStatus(401)
-      break
-    case 'Bearer ' + process.env.API_AUTHORIZATION_TOKEN:
-      next()
-      break
-    default:
-      res.sendStatus(403)
-  }
-})
-
 require('./users')(app, db)
 require('./subjects')(app, db)
 require('./exercises')(app, db)
