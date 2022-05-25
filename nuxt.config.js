@@ -28,7 +28,6 @@ export default {
   plugins: [
     '~/plugins/click-outside.js',
     { src: "~/plugins/vue-js-modal", mode: "client" },
-    '~/plugins/axios.js'
   ],
 
   serverMiddleware: [

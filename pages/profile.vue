@@ -5,13 +5,24 @@
 
         <span class="mobile">Pour pouvoir compléter des exercices, merci de vous rendre sur un ordinateur</span>
         <section id="profileContent">
-            <h1>{{ userDetails.username }}</h1>
-            <img :src="userDetails.avatar" alt="Avatar" id="navAvatar" loading="lazy" />
+            <aside>
+                <img :src="userDetails.avatar" alt="Avatar" id="navAvatar" loading="lazy" />
+                <h1>{{ userDetails.username }}</h1>
+                <span>XP: {{ Math.floor(userDetails.xp) }} | Niveau: {{ userDetails.level }}</span>
+                <section id="badges"></section>
+
+                <article>
+                    <span>Date de création du compte</span>
+                    <span class="countdown">{{ ("0" + date.getDate()).slice(-2) + "/" + ("0" + parseInt(date.getMonth() + 1)).slice(-2) + "/" + date.getFullYear() }}</span>
+                </article>
+            </aside>
+            
+            
             <span>Flags: {{ userDetails.flags }}</span>
             <span>Sujets complétés: {{ userDetails.completed_subjects }}</span>
 
             <span>XP & Level: {{ userDetails.xp }} / {{ userDetails.level }}</span>
-            <span>Création du compte: {{ new Date(userDetails.account_creation) }}</span>
+            <span>Création du compte: {{  }}</span>
             <span>Temps accumulé: {{ userDetails.accumulated_time }}</span>
         </section>
     </main>
@@ -33,12 +44,14 @@ export default {
         /* Contenu à render dans la page */
         return {
             userDetails: null,
-            innerWidth: null
+            innerWidth: null,
+            date: null
         }
     },
 
     async fetch() {
         this.userDetails = await api.getUserDetails(this.$auth, this.$axios);
+        this.date = new Date(this.userDetails.account_creation)
     },
 
     async created() {
