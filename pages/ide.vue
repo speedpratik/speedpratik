@@ -18,15 +18,15 @@
                             <span>Temps écoulé:</span>
                             <span class="countdown">{{ tempsMit.string }}</span>
                         </article>
-                        <!-- <article>
-                            <span>{{ errorsCount }} erreur(s).</span>
-                            <i class="fa-solid fa-circle-exclamation"></i>
+                        <article>
+                            <span>Erreur(s) python</span>
+                            <span class="countdown">{{ errorsCount }}</span>
                         </article>
 
                         <article v-if="this.$auth.loggedIn">
-                            <span>+ {{ Math.floor(300 * Math.exp(-2 * tempsMit.time)) }}xp.</span>
-                            <i class="fa-solid fa-flask"></i>
-                        </article> -->
+                            <span>XP récolté</span>
+                            <span class="countdown">{{ xp_award }}</span>
+                        </article>
                     </section>
 
                     <button @click="$router.push('/')">Retour</button>
@@ -35,7 +35,7 @@
             <canvas id="confettis"></canvas>
 
             <article id="ide">
-                <section id="consigne">
+                <section id="consigne" v-if="runner != null">
                     <span
                         class="announcement"
                         v-if="!this.$auth.loggedIn"
@@ -95,7 +95,7 @@
 import NavbarSP from "~/components/NavbarSP.vue"
 import CodeFlask from "codeflask"
 import Confettis from "canvas-confetti"
-
+import api from "~/plugins/api";
 
 export default {
     name: "Ide",
@@ -108,7 +108,7 @@ export default {
                         this.runner = await loadPyodide();
 
                         // On démarre le timer
-                        this.startedExercise = new Date();
+                        this.startedExercise = Date.now();
 
                         // On en profite pour set up l'editeur
                         for (const exercice of this.exercise) {
@@ -130,6 +130,7 @@ export default {
         /* Contenu à render dans la page */
         return {
             id: null,
+            mode: null, // ["speedrun", "compet", "practice", "daily"]
             exercise: null,
             runner: null,
             editors: [],
@@ -139,26 +140,33 @@ export default {
             // Statistiques
             startedExercise: null,
             errorsCount: 0,
-            tempsMit: null
+            tempsMit: null,
+            xp_award: null
         }
     },
 
     async fetch() {
         /* Récupère l'exo */
         if (this.id != null) {
-            const exercise = await this.getSubjectExerciseFromId(this.id);
+            const exercise = await api.getSubjectExerciseFromId(this.id, this.$axios);
             this.exercise = exercise;
 
             // Exo introuvable dans la bdd
             if (this.exercise.length == 0) this.$router.push("/");
         }
     },
+    fetchOnServer: true,
 
-    async created() {
+    created() {
         if (process.client) {
             const ID = window.localStorage.getItem("idSubject");
             window.localStorage.removeItem("idSubject");
+
+            const MODE = window.localStorage.getItem("modeSubject");
+            window.localStorage.removeItem("modeSubject");
+
             this.id = ID;
+            this.mode = MODE;
 
             /* Empêche les utilisateurs d'avoir accès à la page sans ID */
             if (ID == null) this.$router.push("/");
@@ -168,6 +176,11 @@ export default {
 
             /* Initialise la variable CanValidate */
             this.canValidate = this.validate[0] && this.validate[1];
+
+            /* Regarde si ils sont mobiles ou tablettes */
+            if (this.$device.isMobileOrTablet && window.innerWidth <= 800) {
+                this.$router.push("/profile");
+            }
         }
     },
 
@@ -220,18 +233,6 @@ export default {
             return this.canValidate = this.validate[0] && this.validate[1];
         },
 
-        /* Récupère l'exo d'un sujet depuis l'id de celui-ci */
-        getSubjectExerciseFromId(id) {
-            return new Promise(async (res, rej) => {
-                try {
-                    const req = await this.$axios.$get(`/api/subjects/id/${id}/exercises`);
-                    res(req);
-                } catch (e) {
-                    rej(e);
-                }
-            });
-        },
-
         /* Temps entre deux dates */
         differenceDate() {
             const diff = new Date() - this.startedExercise;
@@ -244,7 +245,7 @@ export default {
         },
 
         /* Valide l'exercice */
-        validation() {
+        async validation() {
             const canvas = document.getElementById("confettis");
             canvas.style.display = "block";
 
@@ -253,8 +254,13 @@ export default {
             this.tempsMit = this.differenceDate();
             this.canValidate = false;
 
-            console.log(this.tempsMit);
+            // Submit l'exercice (Seulement si il est co)
+            if (this.$auth.loggedIn) {
+                const { xp_award } = await this.submissionAPI();
+                this.xp_award = Math.floor(xp_award);
+            }
 
+            // Confettis pendant 2s
             const duration = 2000;
             const end = Date.now() + duration;
 
@@ -281,7 +287,28 @@ export default {
 
                 if (Date.now() < end) requestAnimationFrame(frame);
             }());
+        },
 
+        /* API submission */
+        submissionAPI(){
+            return new Promise(async (res, rej) => {
+                try {
+                    const userDetails = await api.getUserDetails(this.$auth, this.$axios);
+
+                    const req = await this.$axios.$post("/api/submissions", {
+                        user: userDetails.id,
+                        subject: parseInt(this.id),
+                        start_date: this.startedExercise,
+                        programs: [
+                            this.editors[0].getCode(),
+                            this.editors[1].getCode()
+                        ]
+                    });
+                    res(req);
+                } catch (e) {
+                    rej(e);
+                }
+            });
         }
     },
 

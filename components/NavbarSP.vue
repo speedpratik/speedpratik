@@ -7,9 +7,9 @@
 		</ul>
 
 		<ul class="userContent">
-			<li v-if="this.$auth.loggedIn">
-				<span v-if="userDetails">{{ userDetails.username }}</span>
-				<img v-if="userDetails" @click="dropDown = true" :src="userDetails.avatar" alt="Avatar" id="navAvatar" loading="lazy" />
+			<li v-if="this.$auth.loggedIn && userDetails">
+				<span>{{ userDetails.username }}</span>
+				<img @click="dropDown = true" :src="userDetails.avatar" alt="Avatar" id="navAvatar" loading="lazy" />
 
 				<ul v-if="dropDown" data-linked="navAvatar" v-click-outside id="dropdown">
 					<li @click="profile">Profil</li>
@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import api from "~/plugins/api";
+
 export default {
 	name: "NavbarSP",
 	data() {
@@ -36,8 +38,7 @@ export default {
 	async fetch () {
 		/* Récupère les détails de l'utilisateur */
 		if (this.$auth.loggedIn) {
-			const details = await this.getUserDetails();
-			this.userDetails = details;
+			this.userDetails = await api.getUserDetails(this.$auth, this.$axios);
 		}
 	},
 
@@ -55,41 +56,6 @@ export default {
 
 		/* Retourne sur la page d'accueil */
 		home() { this.$router.push("/"); },
-
-		/* Récupère les infos utilisateur */
-		getUserDetails() {
-			return new Promise(async (res, rej) => {
-				const strategy = this.$auth.$state.strategy;
-				const infos = {
-					username: null,
-					avatarLink: null,
-					email: null,
-					oauth: strategy
-				}
-
-				switch (strategy) {
-					case "discord":
-						const { username, id, avatar, email } = this.$auth.user;
-						infos.username = username;
-						infos.avatarLink = `https://cdn.discordapp.com/avatars/${id}/${avatar}.png?size=128`;
-						infos.email = email
-						break;
-				}
-
-
-				try {
-					const req = await this.$axios.$post("/api/users", {
-						username: infos.username,
-						email: infos.email,
-						oauth2: infos.oauth,
-						avatar: infos.avatarLink
-					});
-					res(req);
-				} catch(e) { 
-					this.$auth.loginWith(strategy); // Reconnection, erreur
-				}
-			});
-		}
 	}
 }
 </script>

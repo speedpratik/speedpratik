@@ -27,7 +27,8 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/click-outside.js',
-    { src: "~/plugins/vue-js-modal", mode: "client" }
+    { src: "~/plugins/vue-js-modal", mode: "client" },
+    '~/plugins/axios.js'
   ],
 
   serverMiddleware: [
@@ -48,7 +49,8 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
-    '@nuxtjs/markdownit'
+    '@nuxtjs/markdownit',
+    '@nuxtjs/device'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
