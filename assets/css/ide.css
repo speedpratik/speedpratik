@@ -46,6 +46,7 @@
     margin-bottom: 3vh; 
     display: flex; 
     flex-direction: column; 
+    font-size: .85vw;
 }
 #ide section#consigne .enonce span:last-of-type {margin-top: 2vh;}
 #ide section#consigne .enonce:first {
@@ -58,7 +59,7 @@
     padding: 3px 5px;
     background-color: rgba(117, 117, 117, 0.2);
     border-radius: 5px;
-    font-size: 15px;
+    font-size: .75vw;
 }
 
 #ide section#consigne .asserts {

@@ -116,7 +116,7 @@ button:active { transform: translateY(0); opacity: 1; }
 .countdown {
     font-size: 2pc;
     text-transform: uppercase;
-    font-family: 'Koulen', cursive;
+    font-family: 'Koulen', cursive !important;
     margin: 1vh 0;
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 5px;
