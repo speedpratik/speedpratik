@@ -102,7 +102,7 @@ export default {
 
 
 			localStorage.setItem("idSubject", id);
-			localStorage.setItem("modeSubject", "daily");
+			localStorage.setItem("modeSubject", 2);
 			this.$router.push("/ide");
 		},
 
