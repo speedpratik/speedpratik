@@ -12,7 +12,7 @@
 					<button @click="startExercise(true)">Compléter</button>
 				</div>
 				<h1>Exercice Quotidien</h1>
-				<h2>Sujet #{{ quotiChallengeNumber }}</h2>
+				<h2>Sujet #{{ quotiExercise ? ("0000" + quotiExercise.number).slice(-4) : "0001" }}</h2>
 				<span>Les exercices quotidiens sont des exercices d’épreuve pratique niveau rouge rapportant un nombre de point supérieur aux exercices de base.</span>
 			</article>
 
@@ -45,6 +45,7 @@
 <script>
 import NavbarSP from "~/components/NavbarSP.vue"
 import StatsWindow from "~/components/StatsWindow.vue"
+import api from "~/plugins/api";
 
 export default {
 	name: "IndexPage",
@@ -55,11 +56,11 @@ export default {
 		/* Contenu à render dans la page */
 		return {
 			timeLeft: `${("0" + hours).slice(-2)}:${("0" + minutes).slice(-2)}:${("0" + seconds).slice(-2)}`,
-			quotiChallengeNumber: "0001"
+			quotiExercise: null,
 		}
 	},
 
-	mounted() {
+	async mounted() {
 		/* Update le timer de l'exercice quotidien */
 		setInterval(() => {
 			const { seconds, minutes, hours } = this.displayTimeLeft();
@@ -69,13 +70,16 @@ export default {
 		}, 1000);
 
 		/* Récupère les informations sur l'exercice quotidien */
-		const { number } = this.getTodayExercise();
-		this.quotiChallengeNumber = number;
+		const quoti = await api.getRandomSubject([2], this.$axios);
+		this.quotiExercise = quoti;
 
 		/* Regarde si ils sont mobiles ou tablettes */
 		if (this.$device.isMobileOrTablet && window.innerWidth <= 800) {
 			this.$router.push("/profile");
 		}
+
+		/* Toast pour dire qu'on est sur une demo */
+		this.$toast.show("Cette version est une version test! Le site sera mit à jour.");
 	},
 
 
@@ -97,25 +101,13 @@ export default {
 		/* Redirige vers la page d'IDE */
 		startExercise(daily = false) {
 			let id;
-			if (daily) id = this.getTodayExercise().id;
+			if (daily) id = this.quotiExercise.id;
 			else id = 1;
 
 
 			localStorage.setItem("idSubject", id);
 			localStorage.setItem("modeSubject", 2);
 			this.$router.push("/ide");
-		},
-
-		/* Récupère l'exercice quotidien */
-		getTodayExercise() {
-
-			// A ADD: Calcul pour choisir l'exo quotidien comme ça pas besoin d'encombrer tout
-			return {
-				// ... //
-				id: 1,
-				number: "33178",
-				// ... //
-			};
 		}
 	},
 
