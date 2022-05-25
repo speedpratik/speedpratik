@@ -35,7 +35,7 @@
             <canvas id="confettis"></canvas>
 
             <article id="ide">
-                <section id="consigne">
+                <section id="consigne" v-if="runner != null">
                     <span
                         class="announcement"
                         v-if="!this.$auth.loggedIn"
@@ -95,7 +95,7 @@
 import NavbarSP from "~/components/NavbarSP.vue"
 import CodeFlask from "codeflask"
 import Confettis from "canvas-confetti"
-
+import api from "~/plugins/api";
 
 export default {
     name: "Ide",
@@ -130,10 +130,11 @@ export default {
         /* Contenu à render dans la page */
         return {
             id: null,
+            mode: null, // ["speedrun", "compet", "practice", "daily"]
             exercise: null,
             runner: null,
             editors: [],
-            validate: [false, false],
+            validate: [true, true],
             canValidate: false,
 
             // Statistiques
@@ -147,7 +148,7 @@ export default {
     async fetch() {
         /* Récupère l'exo */
         if (this.id != null) {
-            const exercise = await this.getSubjectExerciseFromId(this.id);
+            const exercise = await api.getSubjectExerciseFromId(this.id, this.$axios);
             this.exercise = exercise;
 
             // Exo introuvable dans la bdd
@@ -156,11 +157,16 @@ export default {
     },
     fetchOnServer: true,
 
-    async created() {
+    created() {
         if (process.client) {
             const ID = window.localStorage.getItem("idSubject");
             window.localStorage.removeItem("idSubject");
+
+            const MODE = window.localStorage.getItem("modeSubject");
+            window.localStorage.removeItem("modeSubject");
+
             this.id = ID;
+            this.mode = MODE;
 
             /* Empêche les utilisateurs d'avoir accès à la page sans ID */
             if (ID == null) this.$router.push("/");
@@ -170,6 +176,11 @@ export default {
 
             /* Initialise la variable CanValidate */
             this.canValidate = this.validate[0] && this.validate[1];
+
+            /* Regarde si ils sont mobiles ou tablettes */
+            if (this.$device.isMobileOrTablet && window.innerWidth <= 800) {
+                this.$router.push("/profile");
+            }
         }
     },
 
@@ -220,18 +231,6 @@ export default {
             // Valide le code
             this.validate[editorIndex] = true;
             return this.canValidate = this.validate[0] && this.validate[1];
-        },
-
-        /* Récupère l'exo d'un sujet depuis l'id de celui-ci */
-        getSubjectExerciseFromId(id) {
-            return new Promise(async (res, rej) => {
-                try {
-                    const req = await this.$axios.$get(`/api/subjects/id/${id}/exercises`);
-                    res(req);
-                } catch (e) {
-                    rej(e);
-                }
-            });
         },
 
         /* Temps entre deux dates */
@@ -290,46 +289,11 @@ export default {
             }());
         },
 
-        /* Récupère les infos utilisateur */
-		getUserDetails() {
-			return new Promise(async (res, rej) => {
-				const strategy = this.$auth.$state.strategy;
-				const infos = {
-					username: null,
-					avatarLink: null,
-					email: null,
-					oauth: strategy
-				}
-
-				switch (strategy) {
-					case "discord":
-						const { username, id, avatar, email } = this.$auth.user;
-						infos.username = username;
-						infos.avatarLink = `https://cdn.discordapp.com/avatars/${id}/${avatar}.png?size=128`;
-						infos.email = email
-						break;
-				}
-
-
-				try {
-					const req = await this.$axios.$post("/api/users", {
-						username: infos.username,
-						email: infos.email,
-						oauth2: infos.oauth,
-						avatar: infos.avatarLink
-					});
-					res(req);
-				} catch(e) { 
-					this.$auth.loginWith(strategy); // Reconnection, erreur
-				}
-			});
-		},
-
         /* API submission */
         submissionAPI(){
             return new Promise(async (res, rej) => {
                 try {
-                    const userDetails = await this.getUserDetails();
+                    const userDetails = await api.getUserDetails(this.$auth, this.$axios);
 
                     const req = await this.$axios.$post("/api/submissions", {
                         user: userDetails.id,
