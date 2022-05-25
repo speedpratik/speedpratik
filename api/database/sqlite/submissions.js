@@ -8,6 +8,7 @@ module.exports = (db) => {
       'subject INTEGER,' +
       'exercise INTEGER,' +
       'number INTEGER NOT NULL,' +
+      'type INTEGER NOT NULL,' +
       'start_date INTEGER NOT NULL,' +
       'submit_date INTEGER NOT NULL,' +
       'xp_award INT NOT NULL,' +
