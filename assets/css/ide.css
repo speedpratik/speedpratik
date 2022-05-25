@@ -52,8 +52,8 @@
     border-bottom: 1px solid black;
 }
 
-#ide section#consigne code.language-python { background-color: transparent; padding: 0; border-radius: 0; font-family: 'Inconsolata', monospace; }
-#ide section#consigne pre { background-color: rgba(0, 0, 0, 0.2); padding: 13px 15px; border-radius: 5px; width: fit-content; }
+#ide section#consigne code.language-python { background-color: transparent; padding: 0; border-radius: 0; font-family: 'Inconsolata', monospace; font-size: 80%; }
+#ide section#consigne pre { background-color: rgba(0, 0, 0, 0.2); padding: 13px 15px; border-radius: 5px; width: fit-content; width: 95%; }
 #ide section#consigne code {
     padding: 3px 5px;
     background-color: rgba(117, 117, 117, 0.2);

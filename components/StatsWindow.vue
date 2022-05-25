@@ -10,7 +10,7 @@
         </article>
         <article>
             <span>Temps total accumulé:</span>
-            <h2>{{ userDetails.accumulated_time }}</h2>
+            <h2>{{ new Date(userDetails.accumulated_time).toISOString().substr(11, 8) }}</h2>
         </article>
     </section>
 </template>

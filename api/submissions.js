@@ -57,9 +57,9 @@ module.exports = (app, db) => {
 
     const submitDate = Date.now()
 
+    let xpAward;
     if (submission.type !== 3) {
-      const xpAward = 300 * Math.exp(((-2 * (submitDate - submission.start_date) / 60) / 60) / 1000)
-
+      xpAward = 300 * Math.exp(((-2 * (submitDate - submission.start_date) / 60) / 60) / 1000)
       user.xp += xpAward
     }
 
