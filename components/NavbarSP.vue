@@ -38,7 +38,7 @@ export default {
 	async fetch () {
 		/* Récupère les détails de l'utilisateur */
 		if (this.$auth.loggedIn) {
-			this.userDetails = await api.getUserDetails(this.$auth, this.$api);
+			this.userDetails = await api.getUserDetails(this.$auth, this.$axios);
 		}
 	},
 

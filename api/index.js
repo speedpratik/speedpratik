@@ -24,6 +24,7 @@ app.use((req, res, next) => {
       break
     default:
       res.sendStatus(403)
+      break
   }
 })
 

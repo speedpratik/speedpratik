@@ -62,7 +62,7 @@ export default {
 
 	async fetch() {
 		/* Récupère les informations sur l'exercice quotidien */
-		const quoti = await api.getRandomSubject([2], this.$api);
+		const quoti = await api.getRandomSubject([2], this.$axios);
 		this.quotiExercise = quoti;
 	},
 

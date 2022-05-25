@@ -38,7 +38,7 @@ export default {
     },
 
     async fetch() {
-        this.userDetails = await api.getUserDetails(this.$auth, this.$api);
+        this.userDetails = await api.getUserDetails(this.$auth, this.$axios);
     },
 
     async created() {
