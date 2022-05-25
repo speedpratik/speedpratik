@@ -9,7 +9,7 @@
 				<div class="daily">
 					<span>Prochain exercice dans</span>
 					<h2>{{ timeLeft }}</h2>
-					<button @click="startExercise(true)">Compléter</button>
+					<button @click="startExercise(true, 2)">Compléter</button>
 				</div>
 				<h1>Exercice Quotidien</h1>
 				<h2>Sujet #{{ quotiExercise ? ("0000" + quotiExercise.number).slice(-4) : "0001" }}</h2>
@@ -20,19 +20,19 @@
 				<section class="modes" id="sr">
 					<h1>Mode Speedrun</h1>
 					<span>Complétez un exercice aléatoire de la manière la plus rapide possible!</span>
-					<button>Commencer</button>
+					<button @click="startExercise(false, 1)">Commencer</button>
 				</section>
 
 				<section class="modes" id="comp">
 					<h1>Mode Competitif</h1>
 					<span>Complétez un exercice aléatoire dans le but de gagner des points!</span>
-					<button>Commencer</button>
+					<button @click="startExercise(false, 0)">Commencer</button>
 				</section>
 
 				<section class="modes" id="train">
 					<h1>Mode pratique</h1>
 					<span>Révisez vos épreuves pratique sans vous mettre la pression.</span>
-					<button>Commencer</button>
+					<button @click="startExercise(false, 3)">Commencer</button>
 				</section>
 
 				<StatsWindow />
@@ -60,6 +60,12 @@ export default {
 		}
 	},
 
+	async fetch() {
+		/* Récupère les informations sur l'exercice quotidien */
+		const quoti = await api.getRandomSubject([2], this.$axios);
+		this.quotiExercise = quoti;
+	},
+
 	async mounted() {
 		/* Update le timer de l'exercice quotidien */
 		setInterval(() => {
@@ -68,10 +74,6 @@ export default {
 
 			if (this.timeLeft != newValue) this.timeLeft = newValue;
 		}, 1000);
-
-		/* Récupère les informations sur l'exercice quotidien */
-		const quoti = await api.getRandomSubject([2], this.$axios);
-		this.quotiExercise = quoti;
 
 		/* Regarde si ils sont mobiles ou tablettes */
 		if (this.$device.isMobileOrTablet && window.innerWidth <= 800) {
@@ -99,14 +101,17 @@ export default {
 		},
 
 		/* Redirige vers la page d'IDE */
-		startExercise(daily = false) {
+		async startExercise(daily = false, type) {
 			let id;
 			if (daily) id = this.quotiExercise.id;
-			else id = 1;
+			else {
+				const exo = await api.getRandomSubject([2], this.$axios);
+				id = exo.id;
+			}
 
 
 			localStorage.setItem("idSubject", id);
-			localStorage.setItem("modeSubject", 2);
+			localStorage.setItem("modeSubject", type);
 			this.$router.push("/ide");
 		}
 	},
