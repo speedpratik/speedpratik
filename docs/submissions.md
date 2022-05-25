@@ -13,6 +13,7 @@ Represents users attempts at solving subjects.
 | `subject`     | int   | the submission's linked subject ID if applicable                                |
 | `exercise`    | int   | the submission's linked exercise ID if applicable                               |
 | `number`      | int   | the submission's number for the subject / exercise by the user                  |
+| `type`        | int   | the submission's [type](/submissions?id=submissions-type)                       |
 | `start_date`  | int   | the submission's starting date as a timestamp                                   |
 | `submit_date` | int   | the submission's submit date as a timestamp                                     |
 | `xp_award`    | int   | the submission's XP award                                                       |
@@ -31,6 +32,7 @@ The submission must have either `subject` or `exercise` values but not both.
   "subject": 27,
   "exercise": null,
   "number": 1,
+  "type": 0,
   "start_time": 1653238667,
   "submit_time": 1653239373,
   "xp_award": 167,
@@ -56,6 +58,7 @@ The submission must have either `subject` or `exercise` values but not both.
   "subject": null,
   "exercise": 123,
   "number": 2,
+  "type": 3,
   "start_time": 1650033056,
   "submit_time": 1650037520,
   "xp_award": 12,
@@ -67,6 +70,15 @@ The submission must have either `subject` or `exercise` values but not both.
   ]
 }
 ```
+
+#### Submissions type
+
+| Value | Type | Description                  |
+|:-----:|------|------------------------------|
+|  `0`  | int  | For competitive submissions  |
+|  `1`  | int  | For Speedrunning submissions |
+|  `2`  | int  | For daily' submissions       |
+|  `3`  | int  | For practise submissions     |
 
 #### Programs Sub-structure
 
