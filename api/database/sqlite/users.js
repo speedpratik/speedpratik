@@ -70,9 +70,9 @@ module.exports = (db) => {
 
   module.modify = async (user) => {
     db.run('UPDATE users SET username=?, avatar=?, flags=?, oauth2=?, completed_subjects=?, completed_exercises=?,' +
-      'accumulated_time=?, achievements=?, trophies=?, xp=?, level=?',
+      'accumulated_time=?, achievements=?, trophies=?, xp=?, level=? WHERE id=?',
     [user.username, user.avatar, user.flags, user.oauth2, user.completed_subjects, user.completed_exercises,
-      user.accumulated_time, user.achievements, user.trophies, user.xp, user.level])
+      user.accumulated_time, user.achievements, user.trophies, user.xp, user.level, user.id])
 
     return await module.get(user.id)
   }
