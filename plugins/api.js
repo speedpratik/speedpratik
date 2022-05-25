@@ -21,7 +21,7 @@ export default {
 
 
             try {
-                const req = await api.$post("users", {
+                const req = await api.$post("/api/users", {
                     username: infos.username,
                     email: infos.email,
                     oauth2: infos.oauth,
@@ -39,7 +39,7 @@ export default {
     getSubjectExerciseFromId: (id, api) => {
         return new Promise(async (res, rej) => {
             try {
-                const req = await api.$get(`subjects/id/${id}/exercises`);
+                const req = await api.$get(`/api/subjects/id/${id}/exercises`);
                 res(req);
             } catch (e) {
                 rej(e);
@@ -56,7 +56,7 @@ export default {
 
             for (const difficulty of difficultyRange){
                 try {
-                    const req = await api.$get(`subjects/difficulty/${difficulty}`);
+                    const req = await api.$get(`/api/subjects/difficulty/${difficulty}`);
                     for (const subject of req){ subjects.push(subject); }
                 } catch (e) {
                     rej(e);
