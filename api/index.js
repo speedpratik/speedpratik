@@ -19,7 +19,7 @@ app.use((req, res, next) => {
     case undefined:
       res.sendStatus(401)
       break
-    case 'Bearer ' + process.env.API_AUTHORIZATION_TOKEN:
+    case process.env.API_AUTHORIZATION_TOKEN:
       next()
       break
     default:
