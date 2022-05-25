@@ -56,9 +56,13 @@ module.exports = (app, db) => {
     }
 
     const submitDate = Date.now()
-    const xpAward = 300 * Math.exp(((-2 * (submitDate - submission.start_date) / 60) / 60) / 1000)
 
-    user.xp += xpAward
+    if (submission.type !== 3) {
+      const xpAward = 300 * Math.exp(((-2 * (submitDate - submission.start_date) / 60) / 60) / 1000)
+
+      user.xp += xpAward
+    }
+
     user.accumulated_time += submitDate - submission.start_date
 
     await db.users.modify(user)
