@@ -109,8 +109,8 @@ module.exports = (db) => {
 
   module.create = (submission) => {
     return new Promise((resolve, reject) => {
-      db.run('INSERT INTO submissions(user, subject, exercise, number, start_date, submit_date, xp_award, programs) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-        [submission.user, submission.subject, submission.exercise, submission.number, submission.start_date, submission.submit_date, submission.xp_award, submission.programs],
+      db.run('INSERT INTO submissions(user, subject, exercise, number, type, start_date, submit_date, xp_award, programs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [submission.user, submission.subject, submission.exercise, submission.number, submission.type, submission.start_date, submission.submit_date, submission.xp_award, submission.programs],
         async function (err) {
           if (err) {
             return reject(err)
