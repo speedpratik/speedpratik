@@ -46,8 +46,8 @@
                             <h1>{{ exercice.topic }}</h1>
                             <span v-html="$md.render(exercice.question)"></span>
 
-                            <span>Exemples:</span>
-                            <ul class="asserts" v-for="assert of exercice.asserts">
+                            <span v-if="exercice.asserts.length > 0">Exemples:</span>
+                            <ul class="asserts" v-if="exercice.asserts.length > 0" v-for="assert of exercice.asserts">
                                 <li>{{ assert[0] }} == {{ assert[1] }}</li>
                             </ul>
                         </li>
@@ -69,14 +69,7 @@
                     <section id="footer">
                         <article>
                             <h1>Actions</h1>
-                            <button
-                                v-if="runner != null"
-                                @click="execPython(0)"
-                            >Éxecuter première fenêtre de code</button>
-                            <button
-                                v-if="runner != null"
-                                @click="execPython(1)"
-                            >Éxecuter deuxième fenêtre de code</button>
+                            <button v-if="runner != null" v-for="(exercice, i) of exercise" @click="execPython(exercice.id, i)">Exécuter la {{i + 1}}e fenêtre de code</button>
 
                             <div v-if="runner != null">
                                 <button v-if="canValidate" @click="validation">Soumettre</button>
@@ -206,22 +199,25 @@ export default {
         },
 
         /* Execute le python */
-        async execPython(editorIndex) {
-            const _code = this.editors[editorIndex].getCode();
+        async execPython(editorID, index) {
+            console.log(editorID, index)
+            const _code = this.editors[index].getCode();
 
             // Créer un code personnalisé pour interargir avec le dom aussi
-            let codeToExec = `import js\ndef print(content):\tjs.pythonLog("none", repr(content), ${editorIndex + 1}, False)\n${_code}\n`
+            let codeToExec = `import js\ndef print(content):\tjs.pythonLog("none", repr(content), ${editorID}, False)\n${_code}\n`
 
             // Ajoute les asserts
-            const asserts = this.exercise.filter(ex => ex.id == editorIndex + 1)[0].asserts;
-            asserts.map(assert => { codeToExec += `assert ${assert[0]} == ${assert[1]}, "Ton programme ne passe pas les asserts!"\n`; })
+            const exo = this.exercise[index];
+            if (exo.asserts) exo.asserts.map(assert => { codeToExec += `assert ${assert[0]} == ${assert[1]}, "Ton programme ne passe pas les asserts!"\n`; })
+            if (!exo.asserts) this.$toast.info("Cet execice ne comporte pas encore d'asserts.");
+
             codeToExec += `print("Succès!")`;
 
             try {
                 await this.runner.runPythonAsync(codeToExec);
             } catch (e) {
-                this.log("error", e, editorIndex + 1);
-                this.validate[editorIndex] = false;
+                this.log("error", e, editorID);
+                this.validate[index] = false;
 
                 this.errorsCount += 1;
 
@@ -229,7 +225,7 @@ export default {
             }
 
             // Valide le code
-            this.validate[editorIndex] = true;
+            this.validate[index] = true;
             return this.canValidate = this.validate[0] && this.validate[1];
         },
 
