@@ -1,5 +1,7 @@
 # speedpratik
 
+### Le site sera transféré sous nextjs pour plus de facilités.
+
 ## Screenshots (Progresses)
 Login page
 ![Login page](https://user-images.githubusercontent.com/29103374/169101863-439cb55d-155c-41d2-93d8-b1c6431c5fb7.png)

@@ -81,7 +81,7 @@ export default {
 		}
 
 		/* Toast pour dire qu'on est sur une demo */
-		this.$toast.show("Cette version est une version test! Le site sera mit à jour.", { 
+		this.$toast.show("Cette version est une version test et il se peut que vous rencontriez des bugs! Le site sera mit à jour.", { 
 			duration : 5000
 		});
 	},
