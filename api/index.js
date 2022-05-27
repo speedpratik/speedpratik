@@ -1,5 +1,8 @@
 import express from 'express'
+const cors = require('cors')
 const app = express()
+
+app.use(cors())
 
 // Database initialization
 let db
@@ -12,9 +15,7 @@ switch (process.env.DB_TYPE) {
 db.initialize()
 
 app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-
-console.log(process.env.DISCORD_CLIENT_ID, process.env.API_AUTHORIZATION_TOKEN)
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded]
 
 require('./users')(app, db)
 require('./subjects')(app, db)
