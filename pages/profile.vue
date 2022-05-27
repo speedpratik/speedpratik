@@ -17,13 +17,14 @@
                 </article>
             </aside>
             
-            
-            <span>Flags: {{ userDetails.flags }}</span>
-            <span>Sujets complétés: {{ userDetails.completed_subjects }}</span>
+            <section>
+                <span>Flags: {{ userDetails.flags }}</span>
+                <span>Sujets complétés: {{ userDetails.completed_subjects }}</span>
 
-            <span>XP & Level: {{ userDetails.xp }} / {{ userDetails.level }}</span>
-            <span>Création du compte: {{  }}</span>
-            <span>Temps accumulé: {{ userDetails.accumulated_time }}</span>
+                <span>XP & Level: {{ userDetails.xp }} / {{ userDetails.level }}</span>
+                <span>Création du compte: {{  }}</span>
+                <span>Temps accumulé: {{ userDetails.accumulated_time }}</span>
+            </section>
         </section>
     </main>
 </template>
