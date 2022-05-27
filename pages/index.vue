@@ -13,6 +13,7 @@
 				</div>
 				<h1>Exercice Quotidien</h1>
 				<h2>Sujet #{{ quotiExercise ? ("0000" + quotiExercise.number).slice(-4) : "0001" }}</h2>
+				<span><b>Les exercices quotidiens sont choisis aléatoirements pour l'instant!</b></span>
 				<span>Les exercices quotidiens sont des exercices d’épreuve pratique niveau rouge rapportant un nombre de point supérieur aux exercices de base.</span>
 			</article>
 
