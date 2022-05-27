@@ -127,7 +127,7 @@ export default {
             exercise: null,
             runner: null,
             editors: [],
-            validate: [true, true],
+            validate: [false, false],
             canValidate: false,
 
             // Statistiques

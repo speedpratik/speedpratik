@@ -49,8 +49,7 @@ export default {
 
 
     /* Récupère un sujet aléatoire dans une range de difficulté */
-    getRandomSubject(difficultyRange, axios){
-
+    getRandomSubject(difficultyRange, axios, daily = false){
         return new Promise(async (res, rej) => {
             const subjects = [];
 

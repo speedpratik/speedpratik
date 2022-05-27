@@ -13,6 +13,7 @@
 				</div>
 				<h1>Exercice Quotidien</h1>
 				<h2>Sujet #{{ quotiExercise ? ("0000" + quotiExercise.number).slice(-4) : "0001" }}</h2>
+				<span><b>Les exercices quotidiens sont choisis aléatoirements pour l'instant!</b></span>
 				<span>Les exercices quotidiens sont des exercices d’épreuve pratique niveau rouge rapportant un nombre de point supérieur aux exercices de base.</span>
 			</article>
 
@@ -81,7 +82,7 @@ export default {
 		}
 
 		/* Toast pour dire qu'on est sur une demo */
-		this.$toast.show("Cette version est une version test! Le site sera mit à jour.", { 
+		this.$toast.show("Cette version est une version test et il se peut que vous rencontriez des bugs! Le site sera mit à jour.", { 
 			duration : 5000
 		});
 	},
