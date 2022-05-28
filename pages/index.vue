@@ -33,7 +33,7 @@
 				<section class="modes" id="train">
 					<h1>Mode pratique</h1>
 					<span>Révisez vos épreuves pratique sans vous mettre la pression.</span>
-					<button @click="startExercise(false, 3)">Commencer</button>
+					<button @click="startExercise(false, 3, [0, 1, 2])">Commencer</button>
 				</section>
 
 				<StatsWindow />
@@ -104,17 +104,12 @@ export default {
 		},
 
 		/* Redirige vers la page d'IDE */
-		async startExercise(daily = false, type) {
+		async startExercise(daily = false, type, range = [0, 1]) {
 			let id;
 			if (daily) id = this.quotiExercise.id;
 			else {
-				if (type != 3) {
-					const exo = await api.getRandomSubject([0, 1], this.$axios);
-					id = exo.id;
-				}else{
-					const exo = await api.getRandomSubject([0, 1, 2], this.$axios);
-					id = exo.id;
-				}
+				const exo = await api.getRandomSubject(range, this.$axios);
+				id = exo.id;
 			}
 
 
