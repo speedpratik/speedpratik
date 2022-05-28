@@ -188,7 +188,7 @@ export default {
         },
 
         /* Log dans les outputs le python */
-        log(type, message, output, clear = true) {
+        log(type, message, output, clear = false) {
             if (clear) document.getElementById(`output_${output}`).innerHTML = "";
 
             const log_ = document.createElement("li");
