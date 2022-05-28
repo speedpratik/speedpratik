@@ -108,8 +108,13 @@ export default {
 			let id;
 			if (daily) id = this.quotiExercise.id;
 			else {
-				const exo = await api.getRandomSubject([2], this.$axios);
-				id = exo.id;
+				if (type != 3) {
+					const exo = await api.getRandomSubject([0, 1], this.$axios);
+					id = exo.id;
+				}else{
+					const exo = await api.getRandomSubject([0, 1, 2], this.$axios);
+					id = exo.id;
+				}
 			}
 
 
